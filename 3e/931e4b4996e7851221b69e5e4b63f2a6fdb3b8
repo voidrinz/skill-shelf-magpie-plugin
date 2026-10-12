@@ -1,0 +1,29 @@
+test/runtime-ui.spec.ts
+  s_bc766963b56617::t_8eaa974ac6c8d3 29-31,33-34,41-42
+  s_bc766963b56617::t_3b107bae66d9ce 35-40
+  s_bc766963b56617::t_ef2045c75de7e6 32
+  s_bc766963b56617::t_0d2dc6c066ee48 9,43-56
+web/src/App.tsx
+  s_bc766963b56617::t_3b107bae66d9ce 146-154,156-157
+  s_bc766963b56617::t_b6c166b6296f0d 155,158
+  s_bc766963b56617::t_2feb2bd79e1ea0 114
+  s_bc766963b56617::t_c783a7a364b043 145
+web/src/ui-preferences.ts
+  s_bc766963b56617::t_0d2dc6c066ee48 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3e931e4b4996e7851221b69e5e4b63f2a6fdb3b8",
+  "prompts": {},
+  "sessions": {
+    "s_bc766963b56617": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fdf-3173-70c0-82fb-3e51726e241d",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
