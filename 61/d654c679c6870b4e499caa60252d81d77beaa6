@@ -1,0 +1,25 @@
+dist/cli.mjs
+  s_7850d1acbe5545::t_dbdc8cc280d789 8973-8976,8995,9679,10575,11909
+dist/cli.mjs.map
+  s_7850d1acbe5545::t_3c419dfc9b28f7 3-6
+dist/plugin.mjs
+  s_7850d1acbe5545::t_4d3dc6d3ca284d 8976-8979,8998,9682,10578,11912,12425
+dist/plugin.mjs.map
+  s_7850d1acbe5545::t_077d6e22b274cb 3-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "61d654c679c6870b4e499caa60252d81d77beaa6",
+  "prompts": {},
+  "sessions": {
+    "s_7850d1acbe5545": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13008-189a-7b93-9e1d-980a91b55d62",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
