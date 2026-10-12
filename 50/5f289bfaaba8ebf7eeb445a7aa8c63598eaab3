@@ -1,0 +1,48 @@
+package.json
+  s_0cbcbba63f59b0::t_ff66aaee86d641 15
+  s_0cbcbba63f59b0::t_5d811c0edb1808 14
+  s_0cbcbba63f59b0::t_d3299fc7c2f230 11-13
+  s_0cbcbba63f59b0::t_5dd22f79f27f91 16-18
+  s_0cbcbba63f59b0::t_6cda8c85892a48 1-10,19-69
+.gitignore
+  s_0cbcbba63f59b0::t_cdb65ff61087ae 1-20
+  s_0cbcbba63f59b0::t_920ebbb2e51927 21-22
+LICENSE
+  s_f5ca1072b3e4cb::t_d9549043666de3 1-21
+pnpm-lock.yaml
+  s_084c2ed3db14da::t_e5e59664757a2e 1-3307
+vite.config.ts
+  s_f5ca1072b3e4cb::t_e078de785d87ac 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "505f289bfaaba8ebf7eeb445a7aa8c63598eaab3",
+  "prompts": {},
+  "sessions": {
+    "s_084c2ed3db14da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12ef2-bb9d-77a3-87fd-734b55144b7c",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_0cbcbba63f59b0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fb5-c917-75e1-93b5-24c6131e214e",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_f5ca1072b3e4cb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12de0-d42d-72a1-a0b2-5f925bd5cfff",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
