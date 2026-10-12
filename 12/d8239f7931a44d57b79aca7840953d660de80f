@@ -1,0 +1,42 @@
+test/assistant.test.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 10,81
+test/sync.test.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 8,55
+src/ai.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 8,21
+test/http.test.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 11,216-218
+package.json
+  s_7850d1acbe5545::t_b1eedc0cb047fe 3
+  s_7850d1acbe5545::t_09f35a2dbf9896 15
+src/assistant.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 6,167
+test/ai.test.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 9,77
+src/runtime.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 14,17
+src/sync.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 8,101
+test/runtime.test.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 8-15
+src/server.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 6,114
+src/version.mjs
+  s_7850d1acbe5545::t_b1eedc0cb047fe 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "12d8239f7931a44d57b79aca7840953d660de80f",
+  "prompts": {},
+  "sessions": {
+    "s_7850d1acbe5545": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13008-189a-7b93-9e1d-980a91b55d62",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
