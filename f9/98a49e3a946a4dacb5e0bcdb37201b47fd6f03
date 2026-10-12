@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_7850d1acbe5545::t_b1eedc0cb047fe 1-7
+README.en.md
+  s_7850d1acbe5545::t_ff94c4bd7ba0cb 45,47,57,114
+README.md
+  s_7850d1acbe5545::t_ff94c4bd7ba0cb 45,47,57,114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f998a49e3a946a4dacb5e0bcdb37201b47fd6f03",
+  "prompts": {},
+  "sessions": {
+    "s_7850d1acbe5545": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13008-189a-7b93-9e1d-980a91b55d62",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
