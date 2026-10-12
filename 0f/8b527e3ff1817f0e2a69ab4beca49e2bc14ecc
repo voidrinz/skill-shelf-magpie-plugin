@@ -1,0 +1,25 @@
+dist/web/assets/index-BFJXD24J.js
+  s_bc766963b56617::t_53de98c234df1d 1-515
+dist/web/index.html
+  s_bc766963b56617::t_53de98c234df1d 10
+dist/plugin.mjs
+  s_bc766963b56617::t_ab0adbf3fb6cc4 12379,12439-12468,12482
+dist/plugin.mjs.map
+  s_bc766963b56617::t_d421cf9aeb1c89 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f8b527e3ff1817f0e2a69ab4beca49e2bc14ecc",
+  "prompts": {},
+  "sessions": {
+    "s_bc766963b56617": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fdf-3173-70c0-82fb-3e51726e241d",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
