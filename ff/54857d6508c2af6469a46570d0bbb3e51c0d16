@@ -1,0 +1,19 @@
+src/sync-format.mjs
+  s_084c2ed3db14da::t_9471b8e5ba08fa 1-231
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff54857d6508c2af6469a46570d0bbb3e51c0d16",
+  "prompts": {},
+  "sessions": {
+    "s_084c2ed3db14da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12ef2-bb9d-77a3-87fd-734b55144b7c",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
