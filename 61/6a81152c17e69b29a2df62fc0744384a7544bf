@@ -1,0 +1,19 @@
+src/domain.mjs
+  s_084c2ed3db14da::t_013b560e64aeab 1-1100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "616a81152c17e69b29a2df62fc0744384a7544bf",
+  "prompts": {},
+  "sessions": {
+    "s_084c2ed3db14da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12ef2-bb9d-77a3-87fd-734b55144b7c",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
