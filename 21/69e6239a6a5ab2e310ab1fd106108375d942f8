@@ -1,0 +1,33 @@
+README.en.md
+  s_bc766963b56617::t_ef2045c75de7e6 51,55-56,58-65
+  s_bc766963b56617::t_0b759b10406729 130
+  s_bc766963b56617::t_192fb2d81282e0 47-49
+  s_bc766963b56617::t_67049a404a41ea 7,128
+  s_bc766963b56617::t_ab7990886c4e30 57,120
+  s_bc766963b56617::t_46fcb5b37eb533 50
+  s_bc766963b56617::t_e677af256bfc5c 66
+README.md
+  s_bc766963b56617::t_192fb2d81282e0 47-49
+  s_bc766963b56617::t_0b759b10406729 130
+  s_bc766963b56617::t_ef2045c75de7e6 51,55-65
+  s_bc766963b56617::t_67049a404a41ea 7,128
+  s_bc766963b56617::t_ab7990886c4e30 120
+  s_bc766963b56617::t_6be997cd323f3b 50
+  s_bc766963b56617::t_b051875f7c27b9 66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2169e6239a6a5ab2e310ab1fd106108375d942f8",
+  "prompts": {},
+  "sessions": {
+    "s_bc766963b56617": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fdf-3173-70c0-82fb-3e51726e241d",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
