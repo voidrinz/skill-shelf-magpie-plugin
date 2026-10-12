@@ -1,0 +1,55 @@
+src/plugin.mjs
+  s_0cbcbba63f59b0::t_4a152202685417 5,49,51-54
+  s_0cbcbba63f59b0::t_27ca56d5b3b0a7 22-47,55-76
+  s_0cbcbba63f59b0::t_0aa2a2d4a49022 2-4
+  s_0cbcbba63f59b0::t_9c8184e854f223 6-8,19-21
+  s_0cbcbba63f59b0::t_8b0a9e8547f9fd 48
+  s_0cbcbba63f59b0::t_b1ef3c5ddd039d 50
+  s_0cbcbba63f59b0::t_4379e808ef7e34 77-79
+  s_0cbcbba63f59b0::t_d12693b732027d 1,9-18,80-87
+src/runtime.mjs
+  s_0cbcbba63f59b0::t_ab4915cac8d00e 36,121,123,125-126,129,134-139,141-142,151-153
+  s_0cbcbba63f59b0::t_7554965ca826ef 5-6,21,29,38,48-49,64,66-83,85-116,119-120,122,124,127-128,130,132-133,147-150,154-170,172-186,188-190,193-204
+  s_0cbcbba63f59b0::t_fe72f5ddf5daa7 52,63,117-118,171,192
+  s_0cbcbba63f59b0::t_4686a3733752d2 35,54-56,59,62
+  s_0cbcbba63f59b0::t_27ca56d5b3b0a7 84,140,143-146
+  s_0cbcbba63f59b0::t_9237aca828bfa4 187
+  s_0cbcbba63f59b0::t_4a152202685417 53,57-58,60-61
+  s_0cbcbba63f59b0::t_08f3beece44a86 131
+  s_0cbcbba63f59b0::t_c9da704f261e4b 191
+  s_0cbcbba63f59b0::t_5169ab7ec2fc3d 2-4
+  s_0cbcbba63f59b0::t_c2e3f11f77bd65 7-9,18-20
+  s_0cbcbba63f59b0::t_a0b2c39a38744c 22-24,26-28
+  s_0cbcbba63f59b0::t_dfd7303959c9d1 30-34
+  s_0cbcbba63f59b0::t_0fd73c39f748df 37
+  s_0cbcbba63f59b0::t_0e909839790039 39-41,45-47
+  s_0cbcbba63f59b0::t_4e1aef6db90acc 50-51
+  s_0cbcbba63f59b0::t_68848018510ee5 65
+  s_0cbcbba63f59b0::t_915b13f337c68a 1,10-17,25,42-44
+scripts/dev.mjs
+  s_f5ca1072b3e4cb::t_a56e5755d85da3 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "901364c29acf6284e5602b8f3170e42d260b7d07",
+  "prompts": {},
+  "sessions": {
+    "s_0cbcbba63f59b0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fb5-c917-75e1-93b5-24c6131e214e",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_f5ca1072b3e4cb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12de0-d42d-72a1-a0b2-5f925bd5cfff",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
