@@ -1,0 +1,29 @@
+README.md
+  s_0cbcbba63f59b0::t_38bce65693a1a0 103
+  s_0cbcbba63f59b0::t_5d811c0edb1808 3-9,11-23,29-35,41,43-47,49,51-78,80,82,84,86,88,90,92-102,104-106,108-114
+  s_0cbcbba63f59b0::t_3d5fde5042bc88 10,42,50,79,81,83,85,87,89,91
+  s_0cbcbba63f59b0::t_ba6a26bbcd24fd 24-27,37-39
+  s_0cbcbba63f59b0::t_4686a3733752d2 48,107
+  s_0cbcbba63f59b0::t_c4d999fdc78e33 1-2
+  s_0cbcbba63f59b0::t_8dc90fa33472d0 28
+  s_0cbcbba63f59b0::t_7fba8ad9742f0e 36
+  s_0cbcbba63f59b0::t_c8eb9f09fb61b5 40
+README.en.md
+  s_0cbcbba63f59b0::t_5d811c0edb1808 1-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "48db7c2da77f42a4e41cddfdb406676feb1e5fa4",
+  "prompts": {},
+  "sessions": {
+    "s_0cbcbba63f59b0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fb5-c917-75e1-93b5-24c6131e214e",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
