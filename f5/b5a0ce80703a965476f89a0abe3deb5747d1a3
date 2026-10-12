@@ -1,0 +1,30 @@
+test/magpie-entry-ui.spec.ts
+  s_bc766963b56617::t_1bb161dc6669c1 7,45
+  s_bc766963b56617::t_e437d8acaa7bd4 29-30
+  s_bc766963b56617::t_7c8d0a62981088 44,46
+  s_bc766963b56617::t_a2cd15672d4ce6 1-6,8-28,31-43,47-69
+test/plugin-host.test.mjs
+  s_bc766963b56617::t_192fb2d81282e0 84,88,115-117,123,207
+  s_bc766963b56617::t_8eaa974ac6c8d3 73-82,85-87,97,100-103,118,120-122,125-126,186,192-194,206,208,243,251,268
+  s_bc766963b56617::t_b6c166b6296f0d 119,124
+  s_bc766963b56617::t_ab7990886c4e30 83,252-253
+src/plugin.mjs
+  s_bc766963b56617::t_192fb2d81282e0 75,79-82,84,88,90-91,96
+  s_bc766963b56617::t_2feb2bd79e1ea0 19,76-78,83,85-87,89,92-95,97-103,113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f5b5a0ce80703a965476f89a0abe3deb5747d1a3",
+  "prompts": {},
+  "sessions": {
+    "s_bc766963b56617": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fdf-3173-70c0-82fb-3e51726e241d",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
