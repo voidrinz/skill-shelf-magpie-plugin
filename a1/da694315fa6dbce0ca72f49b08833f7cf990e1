@@ -1,0 +1,71 @@
+test/plugin-host.test.mjs
+  s_0cbcbba63f59b0::t_c90497e1f96d6c 3-249
+  s_0cbcbba63f59b0::t_febb930c4c9970 1-2
+test/runtime.test.mjs
+  s_0cbcbba63f59b0::t_08f3beece44a86 103,107-111,113-114,116-117,121
+  s_0cbcbba63f59b0::t_c9da704f261e4b 19-24,31,40-47,66,79-80,89,96,115,128
+  s_0cbcbba63f59b0::t_9237aca828bfa4 1-18,25-30,32-39,48-65,67-78,81-88,90-95,97-102,104-106,112,118-120,122-127,129-131
+test/runtime-ui.spec.ts
+  s_0cbcbba63f59b0::t_b9816eaecd990a 22
+  s_0cbcbba63f59b0::t_cd1bf4d6d90ac4 1-21,23-35
+scripts/test-fixtures.mjs
+  s_f5ca1072b3e4cb::t_b7a958ee060768 1-92
+test/ai.test.mjs
+  s_084c2ed3db14da::t_4929a0d0bfd358 1-706
+test/assistant-ui.spec.ts
+  s_084c2ed3db14da::t_ff61d273dd81b8 1-161
+test/catalog-ui.spec.ts
+  s_084c2ed3db14da::t_742c683bc1849d 1-125
+test/common-metadata.test.mjs
+  s_084c2ed3db14da::t_a413781017b3dc 1-279
+test/description-precedence.test.mjs
+  s_084c2ed3db14da::t_863f7ced833fa3 1-32
+test/finder-parity-ui.spec.ts
+  s_084c2ed3db14da::t_3c06a979bceec9 1-197
+test/form-ui.spec.ts
+  s_084c2ed3db14da::t_55519f1ce40a88 1-302
+test/http.test.mjs
+  s_084c2ed3db14da::t_1040df94f2df43 1-507
+test/operations-ui.spec.ts
+  s_084c2ed3db14da::t_08e36982c45348 1-238
+test/settings-ui.spec.ts
+  s_084c2ed3db14da::t_35e60892547fda 1-491
+test/sync-http-integration.test.mjs
+  s_084c2ed3db14da::t_c8d097e43fba5b 1-71
+test/sync.test.mjs
+  s_084c2ed3db14da::t_4a4c8b1afe6972 1-702
+test/ui.spec.ts
+  s_084c2ed3db14da::t_7f04093189c565 1-1330
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a1da694315fa6dbce0ca72f49b08833f7cf990e1",
+  "prompts": {},
+  "sessions": {
+    "s_084c2ed3db14da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12ef2-bb9d-77a3-87fd-734b55144b7c",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_0cbcbba63f59b0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12fb5-c917-75e1-93b5-24c6131e214e",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_f5ca1072b3e4cb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12de0-d42d-72a1-a0b2-5f925bd5cfff",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
