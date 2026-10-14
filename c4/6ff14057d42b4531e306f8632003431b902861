@@ -1,0 +1,37 @@
+src/runtime.mjs
+  s_5f853c9110b487::t_4fb0f4c661f34f 13-14,80-81,90-91,108-109
+  s_5f853c9110b487::t_7f000c959753df 11-12,78-79,88-89
+src/discovery.mjs
+  s_5f853c9110b487::t_83b79d0063c261 58-67
+  s_5f853c9110b487::t_0acd7fb57b47d8 1-57,68-130
+src/project-instructions.mjs
+  s_5f853c9110b487::t_09ab3c7959daa1 1-145
+src/source-operations.mjs
+  s_5f853c9110b487::t_71305cc2a22af0 122
+  s_5f853c9110b487::t_665a8b2c37ccc3 206-217,220-222,241
+  s_5f853c9110b487::t_e093adc8bfa5a6 1-7,9-68,84-99,102-116,119-121,123-151,153,161-163,165-167,172-187,190-205,218-219,223-240,242-257
+  s_5f853c9110b487::t_5bd332c3b716d6 8,69-83,117-118,152,154-160,188-189
+  s_5f853c9110b487::t_133996286bb2a8 100-101,164,168-171
+src/server.mjs
+  s_5f853c9110b487::t_6796764c9afc49 7-8,133-158
+  s_5f853c9110b487::t_12dcdcff4c9579 10,323-325,340
+  s_5f853c9110b487::t_83b79d0063c261 6,116
+  s_5f853c9110b487::t_7f000c959753df 159,166-177,220,229-241
+  s_5f853c9110b487::t_4fb0f4c661f34f 90,190-193,200-205,212-219,402-403
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c46ff14057d42b4531e306f8632003431b902861",
+  "prompts": {},
+  "sessions": {
+    "s_5f853c9110b487": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13bab-763c-73c3-bc37-b2b6a73f1905",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
