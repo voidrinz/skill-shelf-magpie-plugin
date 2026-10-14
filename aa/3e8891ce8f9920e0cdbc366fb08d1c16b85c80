@@ -1,0 +1,25 @@
+src/sync.mjs
+  s_5f853c9110b487::t_63bf36fb660a4f 124,126-127,132,227,235,257,269,291-302,331-338,463,650-653
+  s_5f853c9110b487::t_e5fe12c06bd7cb 476-479
+  s_5f853c9110b487::t_acfc4321004b29 27-45,229,251-252,271-273,339,373-379,415-418,443-447,466-467,584-587,598,607
+  s_5f853c9110b487::t_8a85acb311be97 340
+src/sync-format.mjs
+  s_5f853c9110b487::t_63bf36fb660a4f 103,119-123
+  s_5f853c9110b487::t_c695f16167b474 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa3e8891ce8f9920e0cdbc366fb08d1c16b85c80",
+  "prompts": {},
+  "sessions": {
+    "s_5f853c9110b487": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13bab-763c-73c3-bc37-b2b6a73f1905",
+        "model": "merlin/gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
