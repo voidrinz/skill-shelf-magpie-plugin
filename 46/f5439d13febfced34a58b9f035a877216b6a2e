@@ -1,0 +1,47 @@
+dist/plugin.mjs
+  s_ff602d022be9ff::t_bd73f9d69e68c4 13879-13880,14610-14615
+  s_ff602d022be9ff::t_955b3bee61d934 9442
+  s_ff602d022be9ff::t_53a13b0a41f4c3 7368,7375,13857,13873-13874,13878,13882-13887,13890,13938,13949-13964,13966,13970,13978,13989-14021,14275,14387,14440,14450,14511,14636
+dist/page/.npmignore
+  s_ff602d022be9ff::t_eecdcddde00540 1-2
+dist/cli.mjs
+  s_ff602d022be9ff::t_955b3bee61d934 9439
+  s_ff602d022be9ff::t_53a13b0a41f4c3 7373,13854,13870-13871,13875,13879-13884,13887,13935,13946-13961,13963,13967,13975,13986-14018,14272,14366
+  s_ff602d022be9ff::t_bd73f9d69e68c4 13876-13877
+dist/page/brand.svg
+  s_ff602d022be9ff::t_53a13b0a41f4c3 1-6
+dist/web/assets/index-DYxkyglg.js
+  s_ff602d022be9ff::t_955b3bee61d934 1-533
+dist/web/index.html
+  s_ff602d022be9ff::t_53a13b0a41f4c3 8
+  s_ff602d022be9ff::t_955b3bee61d934 10
+  s_ff602d022be9ff::t_6f37558692a645 11
+dist/page/boot.js
+  s_ff602d022be9ff::t_53a13b0a41f4c3 1-20
+dist/page/index.html
+  s_ff602d022be9ff::t_53a13b0a41f4c3 1-18
+dist/THIRD_PARTY_LICENSES.txt
+  s_ff602d022be9ff::t_6ff3f48d417ab8 1376,1403,1989-2015
+dist/cli.mjs.map
+  s_ff602d022be9ff::t_9c808974d6f0b9 4-6
+dist/plugin.mjs.map
+  s_ff602d022be9ff::t_e5542b61dc2db9 4-6
+dist/web/assets/index-IIviBR8H.css
+  s_ff602d022be9ff::t_28d487f80ca651 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "46f5439d13febfced34a58b9f035a877216b6a2e",
+  "prompts": {},
+  "sessions": {
+    "s_ff602d022be9ff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18563-15f8-74e1-a2b3-0093ffd7ed9e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
