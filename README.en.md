@@ -4,7 +4,7 @@
 
 A visual shelf for your AI agent Skills, right inside your Magpie workflow. Browse what you already have, organize it into folders and tags, and keep reusable collections in Packs.
 
-Install the plugin in [Magpie](https://usemagpie.ai), then use it in your browser. You do not need the [Skill Shelf desktop app](https://github.com/voidrinz/skill-shelf) to get started.
+Install the plugin in [Magpie](https://usemagpie.ai), then open it directly inside the Magpie window. You do not need the [Skill Shelf desktop app](https://github.com/voidrinz/skill-shelf) to get started.
 
 ## What you can do
 
@@ -17,7 +17,7 @@ Install the plugin in [Magpie](https://usemagpie.ai), then use it in your browse
 - **Get help from AI.** Ask about a Skill, generate a description, or translate its description using models you already have in Magpie.
 - **Sync with Skill Shelf.** Exchange Packs and organization with the desktop app through WebDAV or a sync file.
 
-The plugin follows the **Skill Shelf desktop v0.1.14** core feature baseline, including discovery, installation, Agent access, project instructions and independent Packs. Both editions use metadata sync format v5. Matching versions do not imply complete desktop parity; see the [alignment record](FEATURE_PARITY.md).
+The current plugin release is **v0.1.15**, following the **Skill Shelf desktop v0.1.14** core feature baseline, including discovery, installation, Agent access, project instructions and independent Packs. Both editions use metadata sync format v5. The plugin release and desktop baseline are tracked separately; see the [alignment record](FEATURE_PARITY.md).
 
 ## Get started
 
@@ -47,17 +47,19 @@ Replace the example path with the folder's actual location. Keep that folder in 
 
 The plugin starts quietly in the background by default, without opening a browser when Magpie starts, restarts or reloads the plugin. It prefers `127.0.0.1:47822`; if another application is using that port, it automatically chooses a free one. No source-code changes or manual port settings are needed.
 
-Find **From plugins → Skill Shelf** in Magpie's sign-in / add-subscription screen and choose **打开 Skill Shelf** (Open Skill Shelf) to open the page, or reopen it after closing it. The other button, **GitHub**, opens the [plugin repository](https://github.com/voidrinz/skill-shelf-magpie-plugin). Open settings from within the page; there is no separate settings launch button.
+After enabling the plugin, choose **Plugins → Skill Shelf** in Magpie's sidebar. The shelf opens inside the application window, with settings available within the shelf. This requires a recent Magpie version supporting `magpie.page`. If the entry is missing, update Magpie, then disable and re-enable the plugin.
 
-These entries reuse Magpie's plugin sign-in buttons. Magpie shows a method picker first, then still displays a sign-in prompt and verification-code field after either button is clicked. Skill Shelf does not require a login, API key or verification code. Cancel Magpie's sign-in dialog after the page opens; this does not close the workbench. Adding the GitHub entry does not remove this host UI limitation.
+The local service continues to handle scanning and filesystem operations. The page uses the actual workbench address, including automatic port fallback. The plugin installation folder must be writable so startup can update the in-app connection file.
 
-You can also open **`Skill Shelf.html`** in the plugin's data folder and click **Open Skill Shelf**. Both this local entry and Magpie's buttons use the actual address; a fallback port may change, so avoid relying only on a bookmark to one port.
+Magpie's page sandbox does not allow browser storage or downloads. In-app preferences are saved with the shelf data. Pack and sync exports are saved in the data folder's `exports/` directory, which opens automatically. External links open in your system browser.
+
+You can also open **`Skill Shelf.html`** in the plugin data folder to use the shelf in a standalone browser. This local entry uses the actual address; fallback ports may change, so avoid relying only on a bookmark to one port.
 
 **Keep Magpie running while you use the shelf.** If you use the CLI instead of the app, keep `magpie web` running; the one-off installation command does not keep the workbench online.
 
 ### Startup options (advanced)
 
-Normally no changes are needed. The plugin supports `open` (open the browser on startup, `false` by default), `port` (preferred port, `47822` by default, with automatic fallback) and `dataDir` (an absolute path to the shelf data). Only an explicit `open: true` enables automatic opening. If an older configuration enabled it, disable it while keeping the manual button:
+Normally no changes are needed. The plugin supports `open` (open the browser on startup, `false` by default), `port` (preferred port, `47822` by default, with automatic fallback) and `dataDir` (an absolute path to the shelf data). Only an explicit `open: true` enables automatic opening. If an older configuration enabled it, disable it while keeping the in-app entry:
 
 ```sh
 magpie plugin options /absolute/path/to/skill-shelf-magpie-plugin '{"open":false,"port":47822}'
@@ -120,7 +122,7 @@ No. Folders, tags, previews, and AI annotations leave the original Skill files u
 
 ### Why is the page unavailable?
 
-Make sure Magpie is running and the plugin is enabled. Open Magpie's Plugins page once if it has not loaded the plugin yet. After restarting or updating the plugin, refresh the browser; if a new version is not showing, disable and re-enable the plugin first.
+Make sure Magpie is running and the plugin is enabled. Open Magpie's Plugins page once if it has not loaded the plugin yet. After restarting or updating the plugin, reopen Skill Shelf from the sidebar; if a new version is not showing, disable and re-enable the plugin first.
 
 ### What if the default port is already in use?
 
@@ -128,15 +130,15 @@ It automatically moves to a free port without stopping the other application or 
 
 This does not require a graphical port setting in Magpie, editing source code or JSON, or running commands. Reopen `Skill Shelf.html` if you need the current address.
 
-### Why does Magpie label it as a provider?
+### Do I still open it through Add provider?
 
-Magpie currently has no dedicated category for a Skills workbench and falls back to its provider label. Skill Shelf registers a model-free entry so the plugin sign-in button can open the local workbench. It does not offer inference models, save signed-in accounts or intercept other agents' requests.
+No. The plugin now uses Magpie's `magpie.page` entry and does not register a provider or sign-in actions. After updating, disable and re-enable the plugin, then choose **Plugins → Skill Shelf** in the sidebar.
 
 ### Where is my data?
 
 Your shelf data and the `Skill Shelf.html` entry are stored locally in `skill-shelf/` under Magpie's configuration directory. The default is normally `.config/magpie/skill-shelf/` in your home folder; use the actual location if you customized Magpie's configuration directory. On macOS, use Finder's **Go → Go to Folder** with `~/.config/magpie/skill-shelf/`, then double-click the entry file.
 
-Closing the browser or removing the plugin does not automatically delete your data. Back up important Packs before manually deleting data.
+Closing the shelf page or removing the plugin does not automatically delete your data. Back up important Packs before manually deleting data.
 
 ---
 

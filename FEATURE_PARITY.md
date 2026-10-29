@@ -1,16 +1,18 @@
 # Desktop Feature Alignment
 
 Baseline: Skill Shelf desktop **0.1.14**, commit `a826cd0`.
-Plugin version: **0.1.14**. Metadata sync format: **v5**.
+Plugin version: **0.1.15**. Metadata sync format: **v5**.
 
 The plugin now follows desktop core functionality rather than an organizer-only
-product boundary. Matching release numbers identify the upstream baseline, not
-complete implementation or verification of every desktop capability.
+product boundary. The plugin release and desktop baseline are tracked separately;
+the baseline does not imply complete implementation or verification of every desktop capability.
 
 ## Implemented
 
 | Area | Plugin behavior |
 | --- | --- |
+| UI primitives | Desktop-aligned buttons, inputs, menus, selects, tooltips, top-center notifications, Radix dialogs and switches. Dialogs share overlay, focus management and dismissal behavior. |
+| Magpie page | Sidebar entry opens the workbench inside Magpie. The local backend handles filesystem operations; sandbox preferences persist in shelf data, and exports are saved to the local exports folder. |
 | Skills | Global/project catalog, folders, tags, Finder views, previews and installed-Skill updates remain available. |
 | Discovery | skills.sh all-time, trending, hot, official creators/repositories, topics, search and Skill details. Data comes from bounded same-site HTML/API requests, with stale-cache fallback. |
 | Installation | Confirmed GitHub/skills.sh or absolute local sources; registered global/project targets and the desktop Agent registry. The pinned skills 1.5.23 CLI downloads into an isolated HOME/cwd; validated files and lock records are promoted without replacing existing destinations. |
@@ -23,7 +25,7 @@ complete implementation or verification of every desktop capability.
 
 ## Adaptation Boundaries And Remaining Work
 
-- Discovery is a browser workbench backed by skills.sh requests, not an embedded
+- Discovery uses the workbench backed by skills.sh requests, not an embedded
   Electron browser. Arbitrary remote source hosts, arbitrary pasted shell
   commands and the desktop marketplace security-audit presentation are not
   implemented.

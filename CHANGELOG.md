@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.15 - 2026-10-29
+
+- Open Skill Shelf inside Magpie through the official sidebar page entry, replacing the provider/OAuth launch buttons.
+- Persist embedded-page preferences in the local shelf data, save exports to the exports folder and open external links in the system browser.
+- Align notifications, dialogs, buttons, switches and tooltips with the Skill Shelf desktop UI.
+- Keep the Skill Shelf desktop feature baseline at 0.1.14 and metadata sync format at v5.
+
 ## 0.1.14 - 2026-10-15
 
 - Align the plugin's core feature baseline with Skill Shelf desktop 0.1.14; the matching version is not a claim of complete desktop parity.
