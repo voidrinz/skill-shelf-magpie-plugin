@@ -1,0 +1,104 @@
+web/src/ShelfSwitch.tsx
+  s_ff602d022be9ff::t_796752112b17f2 1-6
+web/src/project-instructions.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1,12-13,79
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 18-19
+web/src/shelf-button.css
+  s_ff602d022be9ff::t_edef54d94452da 17
+web/src/AiSkillPanel.tsx
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1
+  s_ff602d022be9ff::t_edef54d94452da 76,81
+web/src/sync-settings.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 212
+web/src/AiAssistantSidebar.tsx
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1,249-251,253,255,263
+  s_ff602d022be9ff::t_edef54d94452da 245
+web/src/shelf-settings.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 915-917,932-933
+web/src/ShelfToast.tsx
+  s_ff602d022be9ff::t_144f6fbf88819c 1-51
+web/src/ShelfTooltip.tsx
+  s_ff602d022be9ff::t_796752112b17f2 1-12
+web/src/DiscoverWorkspace.tsx
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 1,4,24-25,27
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 26
+web/src/SyncSettings.tsx
+  s_ff602d022be9ff::t_675b89f44fbb46 4
+  s_ff602d022be9ff::t_62a8711d0a09e6 5
+  s_ff602d022be9ff::t_f69c3ed917044f 206-210
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 2,82,102
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1,92,101,237,245,247
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 81
+web/src/FinderWorkspace.tsx
+  s_4c21a5ac672ecb::t_6d9b069184bbc1 4,452,536
+web/src/SettingsWorkspace.tsx
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 129
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 2-3,43,100,123-125,130
+  s_ff602d022be9ff::t_edef54d94452da 86-87,117,120-121,126-127,132
+web/src/App.tsx
+  s_ff602d022be9ff::t_7a7b2534250755 228-229,237,277,324,446-447,460
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 77
+  s_ff602d022be9ff::t_144f6fbf88819c 11,94-98
+  s_ff602d022be9ff::t_edef54d94452da 400,436,449,452,454,614,619
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 12-13,65,76,78-79
+web/src/shelf-shell.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 204-205
+web/src/ProjectInstructions.tsx
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 1,4,102-103,126
+  s_ff602d022be9ff::t_675b89f44fbb46 2
+web/src/shelf-toast.css
+  s_ff602d022be9ff::t_144f6fbf88819c 1-15
+web/src/main.tsx
+  s_ff602d022be9ff::t_144f6fbf88819c 7
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 8,16,19
+  s_ff602d022be9ff::t_f69c3ed917044f 6,18,20-22
+web/src/style.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 374-375
+web/src/AiSettings.tsx
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 1
+  s_ff602d022be9ff::t_edef54d94452da 76,90,97
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 2,74
+web/src/newskills-operations.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 10,13
+web/src/discover-workspace.css
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 38,40-41
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 39
+web/src/SkillsOperations.tsx
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 156
+  s_ff602d022be9ff::t_3f2a6cad8bd96d 5,155,157
+  s_ff602d022be9ff::t_675b89f44fbb46 2
+web/src/shelf-dialog.css
+  s_ff602d022be9ff::t_796752112b17f2 1-26,33-35,38-40
+  s_ff602d022be9ff::t_2fcd7a3ec69fed 27
+  s_ff602d022be9ff::t_b27eb9ad1fd5ab 28-32,36-37
+web/src/ShelfButton.tsx
+  s_ff602d022be9ff::t_57d4d15ea1c8a0 1,8-10
+web/src/ShelfDialog.tsx
+  s_ff602d022be9ff::t_379f82ce87650c 2,6-11,13-14,39
+  s_ff602d022be9ff::t_796752112b17f2 1,3-5,12,15-38,40-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "536967b88a1f6c661d3263ad38ff07ab7b69b496",
+  "prompts": {},
+  "sessions": {
+    "s_4c21a5ac672ecb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a135df-c135-7cd0-8ee8-d1a93d4c6c0f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    },
+    "s_ff602d022be9ff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18563-15f8-74e1-a2b3-0093ffd7ed9e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
