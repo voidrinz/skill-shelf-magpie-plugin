@@ -35,11 +35,10 @@
 .discovery-breadcrumb { display: flex; align-items: center; gap: 12px; margin: 0 16px 15px; font-size: 12px; }
 .discovery-footnote { display: flex; align-items: flex-start; gap: 7px; color: var(--muted-foreground); font-size: 10px; line-height: 1.7; margin-top: 14px; }
 .discovery-footnote svg { flex-shrink: 0; margin-top: 2px; }
-.discovery-dialog { padding: 0; width: min(640px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); border: 1px solid var(--border); border-radius: 14px; background: var(--popover); color: var(--foreground); box-shadow: var(--shadow); overflow: auto; }
-.discovery-dialog::backdrop { background: rgb(0 0 0 / .48); backdrop-filter: blur(3px); }
-.discovery-dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 22px 24px 18px; border-bottom: 1px solid var(--border); }
-.discovery-dialog-header h2 { font-size: 17px; font-weight: 600; margin: 0 0 8px; overflow-wrap: anywhere; }
-.discovery-dialog-header p { font-size: 11px; line-height: 1.7; color: var(--muted-foreground); margin: 0; }
+.discovery-dialog { display: flex; flex-direction: column; gap: 0; padding: 0; width: min(672px, calc(100vw - 32px)); max-width: 672px; max-height: calc(100dvh - 40px); border: 1px solid var(--border); border-radius: 14px; background: var(--popover); color: var(--foreground); box-shadow: var(--shadow); overflow: auto; }
+.discovery-dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 22px 52px 18px 24px; border-bottom: 1px solid var(--border); }
+.discovery-dialog-header h2 { font-size: 18px; font-weight: 600; margin: 0 0 8px; overflow-wrap: anywhere; }
+.discovery-dialog-header p { font-size: 14px; line-height: 1.7; color: var(--muted-foreground); margin: 0; }
 .discovery-dialog-header > button { flex-shrink: 0; }
 .discovery-dialog-body { padding: 20px 24px; font-size: 12px; line-height: 1.7; }
 .discovery-dialog-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; border-top: 1px solid var(--border); }

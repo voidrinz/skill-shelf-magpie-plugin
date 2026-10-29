@@ -1,3 +1,6 @@
+import ShelfButton from './ShelfButton';
+import ShelfDialog, { DialogTitle, DialogDescription } from './ShelfDialog';
+import ShelfSwitch from './ShelfSwitch';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { VERSION, DESKTOP_BASELINE } from '../../src/version.mjs';
 import { ArrowUpRight, BookOpen, Bot, Boxes, Check, Download, Eye, FolderPlus, HardDrive, Info, Keyboard, LoaderCircle, Monitor, Moon, Palette, Plus, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Sparkles, Sun, Trash2, Upload, X } from 'lucide-react';
@@ -37,9 +40,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Row({ label, description, children }: { label: string; description: string; children: ReactNode }) {
   return <div className="setting-row"><div><strong>{label}</strong><small>{description}</small></div>{children}</div>;
 }
-function Switch({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
-  return <button type="button" role="switch" data-slot="switch" data-state={checked ? 'checked' : 'unchecked'} aria-label={label} aria-checked={checked} className={`setting-switch${checked ? ' is-enabled' : ''}`} onClick={onChange}><span /></button>;
-}
+
 
 export default function SettingsWorkspace(props: Props) {
   const { state, section, onSection, preferences, onPreferences, busy } = props;
@@ -51,7 +52,6 @@ export default function SettingsWorkspace(props: Props) {
   const [agentDialogOpen, setAgentDialogOpen] = useState(false);
   const [agentQueryDraft, setAgentQueryDraft] = useState('');
   const [agentQuery, setAgentQuery] = useState('');
-  const agentDialog = useRef<HTMLDialogElement>(null);
   const agentSearch = useRef<HTMLInputElement>(null);
   const agentReturnFocus = useRef<HTMLElement | null>(null);
   const [exportId, setExportId] = useState('default');
@@ -63,17 +63,6 @@ export default function SettingsWorkspace(props: Props) {
       .finally(() => { if (active) setAgentLoading(false); });
     return () => { active = false; };
   }, [section, state.scannedAt, agentRevision]);
-  useEffect(() => {
-    if (!agentDialogOpen) return;
-    const previous = agentReturnFocus.current || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
-    const dialog = agentDialog.current;
-    dialog?.showModal();
-    agentSearch.current?.focus();
-    return () => {
-      dialog?.close();
-      requestAnimationFrame(() => { if (previous?.isConnected) previous.focus(); });
-    };
-  }, [agentDialogOpen]);
   const update = (patch: Partial<UiPreferences>) => onPreferences({ ...preferences, ...patch });
   const closeAgentDialog = () => { setAgentDialogOpen(false); setAgentQueryDraft(''); setAgentQuery(''); };
   const toggleAgent = (name: string) => {
@@ -94,8 +83,8 @@ export default function SettingsWorkspace(props: Props) {
   const skillRoots = [...new Set(state.skills.map(skill => skill.path.replace(/\/[^/]+$/, '')))].sort();
   const shortcut = (label: string, description: string, keys: string[]) => <Row key={label} label={label} description={description}><span className="shortcut-keys" data-slot="kbd-group">{keys.map(key => <kbd key={key} data-slot="kbd">{key}</kbd>)}</span></Row>;
   const packFiles = <Section title="Pack 文件">
-    <Row label="导入 Pack" description="恢复 Pack 中的 Skill、文件夹和标签，不覆盖原始 Skill。"><button className="secondary-button" data-slot="button" data-size="sm" disabled={busy} onClick={props.onImport}><Upload />导入 Pack 文件</button></Row>
-    <Row label="导出 Pack" description="导出完整 Pack，便于分享或备份。"><div className="settings-export"><ShelfSelect className="setting-select" aria-label="导出的 Pack" value={state.packs.some(pack => pack.id === exportId) ? exportId : 'default'} onValueChange={setExportId} options={state.packs.map(pack => ({ value: pack.id, label: pack.name }))} /><button className="secondary-button" data-slot="button" data-size="sm" disabled={busy} onClick={() => props.onExport(state.packs.some(pack => pack.id === exportId) ? exportId : 'default')}><Download />导出</button></div></Row>
+    <Row label="导入 Pack" description="恢复 Pack 中的 Skill、文件夹和标签，不覆盖原始 Skill。"><ShelfButton variant="outline" size="sm" data-slot="button" data-size="sm" disabled={busy} onClick={props.onImport}><Upload />导入 Pack 文件</ShelfButton></Row>
+    <Row label="导出 Pack" description="导出完整 Pack，便于分享或备份。"><div className="settings-export"><ShelfSelect className="setting-select" aria-label="导出的 Pack" value={state.packs.some(pack => pack.id === exportId) ? exportId : 'default'} onValueChange={setExportId} options={state.packs.map(pack => ({ value: pack.id, label: pack.name }))} /><ShelfButton variant="outline" size="sm" data-slot="button" data-size="sm" disabled={busy} onClick={() => props.onExport(state.packs.some(pack => pack.id === exportId) ? exportId : 'default')}><Download />导出</ShelfButton></div></Row>
   </Section>;
   return <section className="settings-workspace">
     <nav className="settings-navigation" aria-label="设置分类"><h1>设置</h1><p>应用程序</p>
@@ -108,7 +97,7 @@ export default function SettingsWorkspace(props: Props) {
         : section === 'sync' ? <SyncSettings busy={busy} onSynced={props.onSynced} onNotice={props.onNotice} onError={props.onError} />
         : section === 'general' ? <Page title="通用"><Section title="启动">
           <Row label="启动页面" description="打开 Skill Shelf 时显示的页面。"><ShelfSelect className="setting-select" aria-label="启动页面" value={preferences.startupPage} onValueChange={value => update({ startupPage: value as UiPreferences['startupPage'] })} options={[{ value: 'workbench', label: '工作台' }, { value: 'skills', label: 'Skills' }, { value: 'packs', label: 'Packs' }]} /></Row>
-          <Row label="记住上次位置" description="优先恢复上次打开的页面与文件夹。"><Switch label="记住上次位置" checked={preferences.rememberLocation} onChange={() => update({ rememberLocation: !preferences.rememberLocation })} /></Row>
+          <Row label="记住上次位置" description="优先恢复上次打开的页面与文件夹。"><ShelfSwitch aria-label="记住上次位置" checked={preferences.rememberLocation} onCheckedChange={() => update({ rememberLocation: !preferences.rememberLocation })} /></Row>
         </Section></Page>
         : section === 'appearance' ? <Page title="外观"><Section title="界面">
           <Row label="主题" description="选择浅色、深色或跟随操作系统。"><div className="theme-setting" role="radiogroup" aria-label="外观主题">{([{ value: 'system', label: '跟随系统', icon: Monitor }, { value: 'light', label: '浅色', icon: Sun }, { value: 'dark', label: '深色', icon: Moon }] as const).map(item => <button type="button" role="radio" aria-label={item.label} aria-checked={props.theme === item.value} key={item.value} tabIndex={props.theme === item.value ? 0 : -1} onKeyDown={event => { if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return; event.preventDefault(); const themes: Theme[] = ['system', 'light', 'dark']; const next = event.key === 'Home' ? 0 : event.key === 'End' ? 2 : (themes.indexOf(props.theme) + (event.key === 'ArrowRight' ? 1 : 2)) % 3; props.onTheme(themes[next]); (event.currentTarget.parentElement?.children[next] as HTMLElement | undefined)?.focus(); }} onClick={() => props.onTheme(item.value)}><item.icon size={14} /><span>{item.label}</span></button>)}</div></Row>
@@ -125,21 +114,22 @@ export default function SettingsWorkspace(props: Props) {
         </Section><Section title="搜索">{shortcut('搜索', '提交关键词筛选；Esc 清除搜索。', ['Enter', 'Esc'])}</Section></Page>
         : section === 'skills' || section === 'data' ? <Page title="Skills 与 Agent" status="已就绪">
           <Section title="已安装的 Skill"><Row label="检测到的根目录" description={`在全局与项目范围内检测到 ${state.skills.length} 个 Skill。`}><div className="path-values">{skillRoots.map(root => <code key={root} title={root}>{root}</code>)}{!skillRoots.length && <span>暂未检测到</span>}</div></Row></Section>
-          <Section title="关注的 Agent"><Row label="展示优先级" description="在工作台和 Skill 详情中优先展示这些 Agent，不会改变安装位置。"><div className="focused-agent-setting"><div className="focused-agent-summary">{preferences.focusedAgents.length ? <>{preferences.focusedAgents.slice(0, 3).map(agent => <span key={agent} data-slot="badge" className="settings-badge"><Eye />{agent}</span>)}{preferences.focusedAgents.length > 3 && <span data-slot="badge" className="settings-badge is-outline">+{preferences.focusedAgents.length - 3}</span>}</> : <span>自动展示 · 未固定 Agent</span>}</div><button type="button" className="secondary-button" data-slot="button" data-size="xs" disabled={agentLoading && !agents.length} onClick={event => { agentReturnFocus.current = event.currentTarget; setAgentDialogOpen(true); }}>{agentLoading ? <LoaderCircle className="spin" /> : <SlidersHorizontal />}管理</button></div></Row>{agentError && <div className="settings-inline-error" role="alert">{agentError}<button className="secondary-button" data-slot="button" data-size="xs" onClick={() => setAgentRevision(value => value + 1)}>重试</button></div>}</Section>
+          <Section title="关注的 Agent"><Row label="展示优先级" description="在工作台和 Skill 详情中优先展示这些 Agent，不会改变安装位置。"><div className="focused-agent-setting"><div className="focused-agent-summary">{preferences.focusedAgents.length ? <>{preferences.focusedAgents.slice(0, 3).map(agent => <span key={agent} data-slot="badge" className="settings-badge"><Eye />{agent}</span>)}{preferences.focusedAgents.length > 3 && <span data-slot="badge" className="settings-badge is-outline">+{preferences.focusedAgents.length - 3}</span>}</> : <span>自动展示 · 未固定 Agent</span>}</div><ShelfButton variant="outline" size="xs" type="button"  data-slot="button" data-size="xs" disabled={agentLoading && !agents.length} onClick={event => { agentReturnFocus.current = event.currentTarget; setAgentDialogOpen(true); }}>{agentLoading ? <LoaderCircle className="spin" /> : <SlidersHorizontal />}管理</ShelfButton></div></Row>{agentError && <div className="settings-inline-error" role="alert">{agentError}<ShelfButton variant="outline" size="xs" data-slot="button" data-size="xs" onClick={() => setAgentRevision(value => value + 1)}>重试</ShelfButton></div>}</Section>
           <Section title="Skill Shelf 数据"><Row label="本地元数据" description="包含私有分组、标签以及这些偏好设置。"><div className="path-values"><code title={state.dataDir}>{state.dataDir}</code></div></Row></Section>
           {packFiles}
-          <Section title="Skill 来源"><Row label="本机 Skill 目录" description="扫描这些目录中的 Skill，不修改原始文件。"><button className="secondary-button" data-slot="button" data-size="xs" disabled={busy} onClick={props.onAddRoot}><Plus />添加来源</button></Row><details className="settings-source-details"><summary>管理扫描目录</summary>{state.roots.map(rootRow)}</details></Section>
-          <Section title="项目目录"><Row label="项目专属 Skills" description="单独管理项目中的 Skill。"><button className="secondary-button" data-slot="button" data-size="xs" disabled={busy} onClick={props.onAddProject}><FolderPlus />添加项目</button></Row>{state.projects.map(project => <div className="source-row" key={project.id}><FolderPlus size={18} /><div><strong>{project.name}</strong><code>{project.path}</code></div><button className="icon-button" aria-label={`移除项目 ${project.name}`} disabled={busy} onClick={() => props.onRemoveProject(project)}><Trash2 size={15} /></button></div>)}</Section>
+          <Section title="Skill 来源"><Row label="本机 Skill 目录" description="扫描这些目录中的 Skill，不修改原始文件。"><ShelfButton variant="outline" size="xs" data-slot="button" data-size="xs" disabled={busy} onClick={props.onAddRoot}><Plus />添加来源</ShelfButton></Row><details className="settings-source-details"><summary>管理扫描目录</summary>{state.roots.map(rootRow)}</details></Section>
+          <Section title="项目目录"><Row label="项目专属 Skills" description="单独管理项目中的 Skill。"><ShelfButton variant="outline" size="xs" data-slot="button" data-size="xs" disabled={busy} onClick={props.onAddProject}><FolderPlus />添加项目</ShelfButton></Row>{state.projects.map(project => <div className="source-row" key={project.id}><FolderPlus size={18} /><div><strong>{project.name}</strong><code>{project.path}</code></div><button className="icon-button" aria-label={`移除项目 ${project.name}`} disabled={busy} onClick={() => props.onRemoveProject(project)}><Trash2 size={15} /></button></div>)}</Section>
           {state.scanWarnings.length > 0 && <Section title="扫描提醒"><div className="settings-inline-error">{state.scanWarnings.map((warning, index) => <p key={index}>{warning}</p>)}</div></Section>}
-          {agentDialogOpen && <dialog ref={agentDialog} className="agent-focus-dialog" data-slot="dialog-content" aria-modal="true" aria-labelledby="agent-focus-title" aria-describedby="agent-focus-description" onCancel={event => { event.preventDefault(); closeAgentDialog(); }} onClick={event => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeAgentDialog(); } }}>
-            <div data-slot="dialog-header"><h2 id="agent-focus-title" data-slot="dialog-title">关注的 Agent</h2><p id="agent-focus-description" data-slot="dialog-description">只选择你实际使用的工具。其他兼容 Agent 仍然可用，但会弱化或折叠展示。</p></div>
-            <form className="agent-focus-search" onSubmit={event => { event.preventDefault(); setAgentQuery(agentQueryDraft.trim()); }}><div className="agent-focus-search-field"><Search /><Input ref={agentSearch} type="search" aria-label="搜索 Agent" placeholder="搜索 Agent" value={agentQueryDraft} onChange={event => { setAgentQueryDraft(event.target.value); if (!event.target.value) setAgentQuery(''); }} onKeyDown={event => { if (event.key === 'Escape' && (agentQueryDraft || agentQuery)) { event.preventDefault(); event.stopPropagation(); setAgentQueryDraft(''); setAgentQuery(''); } }} />{(agentQueryDraft || agentQuery) && <button type="button" aria-label="清空 Agent 搜索" onClick={() => { setAgentQueryDraft(''); setAgentQuery(''); agentSearch.current?.focus(); }}><X /></button>}</div><button className="secondary-button" data-slot="button" data-size="sm" type="submit"><Search />搜索</button></form>
-            <div className="agent-focus-count"><span>已选择 {preferences.focusedAgents.length} 个</span>{preferences.focusedAgents.length > 0 && <button type="button" className="settings-ghost-button" data-slot="button" data-size="xs" onClick={() => update({ focusedAgents: [] })}>改用自动展示</button>}</div>
+          {agentDialogOpen && <ShelfDialog className="agent-focus-dialog" onClose={closeAgentDialog} returnFocus={agentReturnFocus.current} aria-labelledby="agent-focus-title" aria-describedby="agent-focus-description">
+
+            <div data-slot="dialog-header"><DialogTitle id="agent-focus-title" data-slot="dialog-title">关注的 Agent</DialogTitle><DialogDescription id="agent-focus-description" data-slot="dialog-description">只选择你实际使用的工具。其他兼容 Agent 仍然可用，但会弱化或折叠展示。</DialogDescription></div>
+            <form className="agent-focus-search" onSubmit={event => { event.preventDefault(); setAgentQuery(agentQueryDraft.trim()); }}><div className="agent-focus-search-field"><Search /><Input ref={agentSearch} type="search" aria-label="搜索 Agent" placeholder="搜索 Agent" value={agentQueryDraft} onChange={event => { setAgentQueryDraft(event.target.value); if (!event.target.value) setAgentQuery(''); }} onKeyDown={event => { if (event.key === 'Escape' && (agentQueryDraft || agentQuery)) { event.preventDefault(); event.stopPropagation(); setAgentQueryDraft(''); setAgentQuery(''); } }} />{(agentQueryDraft || agentQuery) && <button type="button" aria-label="清空 Agent 搜索" onClick={() => { setAgentQueryDraft(''); setAgentQuery(''); agentSearch.current?.focus(); }}><X /></button>}</div><ShelfButton variant="outline" size="sm" data-slot="button" data-size="sm" type="submit"><Search />搜索</ShelfButton></form>
+            <div className="agent-focus-count"><span>已选择 {preferences.focusedAgents.length} 个</span>{preferences.focusedAgents.length > 0 && <ShelfButton variant="ghost" size="xs" onClick={() => update({ focusedAgents: [] })}>改用自动展示</ShelfButton>}</div>
             <div className="agent-focus-list">{visibleAgents.length ? <>{agentGroup(true)}{agentGroup(false)}</> : <div className="agent-focus-empty"><Search />{agentError || '没有匹配的 Agent'}</div>}</div>
-            <div data-slot="dialog-footer"><span className="agent-focus-limit">最多关注 12 个 Agent</span><button type="button" className="primary-button" data-slot="button" data-size="sm" onClick={closeAgentDialog}>关闭</button></div><button type="button" className="settings-dialog-close" aria-label="关闭" onClick={closeAgentDialog}><X /></button>
-          </dialog>}
+            <div data-slot="dialog-footer"><span className="agent-focus-limit">最多关注 12 个 Agent</span><ShelfButton variant="default" size="sm" type="button"  data-slot="button" data-size="sm" onClick={closeAgentDialog}>关闭</ShelfButton></div>
+          </ShelfDialog>}
         </Page>
-        : <Page title="关于"><section className="about-app-card" aria-label="关于这个应用"><div className="about-identity"><span className="about-mark" aria-hidden="true"><BookOpen /></span><div><h3>Skill Shelf</h3><p>版本 {VERSION} · Magpie · 客户端基线 {DESKTOP_BASELINE}</p><p>发现、整理和管理你的 Skill。</p></div></div></section><Section title="本地数据"><div className="privacy-card"><ShieldCheck /><div><strong>你的 Skill 书架保存在这台电脑上。</strong><p>Skill 列表、分组、标签和偏好设置保存在本机。</p></div></div></Section><div className="about-actions"><a className="secondary-button" data-slot="button" data-size="sm" href="https://skills.sh" target="_blank" rel="noreferrer">访问 skills.sh<ArrowUpRight /></a></div></Page>}
+        : <Page title="关于"><section className="about-app-card" aria-label="关于这个应用"><div className="about-identity"><span className="about-mark" aria-hidden="true"><BookOpen /></span><div><h3>Skill Shelf</h3><p>版本 {VERSION} · Magpie · 客户端基线 {DESKTOP_BASELINE}</p><p>发现、整理和管理你的 Skill。</p></div></div></section><Section title="本地数据"><div className="privacy-card"><ShieldCheck /><div><strong>你的 Skill 书架保存在这台电脑上。</strong><p>Skill 列表、分组、标签和偏好设置保存在本机。</p></div></div></Section><div className="about-actions"><ShelfButton asChild variant="outline" size="sm"><a href="https://skills.sh" target="_blank" rel="noreferrer">访问 skills.sh<ArrowUpRight /></a></ShelfButton></div></Page>}
     </div>
   </section>;
 }

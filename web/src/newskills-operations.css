@@ -7,14 +7,10 @@
   border-radius: 12px;
   color: var(--foreground);
   background: var(--card);
-  box-shadow: var(--ss-menu-shadow);
+  box-shadow: var(--ss-shadow-menu);
   padding: 0;
 }
-.skill-operation-dialog[open] { display: flex; flex-direction: column; }
-.skill-operation-dialog::backdrop { background: rgb(0 0 0 / 45%); backdrop-filter: blur(2px); }
-:root[data-theme='dark'] .skill-operation-dialog::backdrop { background: rgb(0 0 0 / 70%); }
-.skill-operation-dialog .skill-operation-close { position: absolute; top: 16px; right: 16px; width: 20px; height: 20px; }
-.skill-operation-dialog .skill-operation-close svg { width: 16px; height: 16px; }
+.skill-operation-dialog { display: flex; flex-direction: column; }
 .skill-operation-header { padding: 24px 48px 0 24px; }
 .skill-operation-header h2 { margin: 0; font-size: 18px; font-weight: 600; }
 .skill-operation-header p { margin: 6px 0 0; color: var(--muted-foreground); font-size: 14px; }

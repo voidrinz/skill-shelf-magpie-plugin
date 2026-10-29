@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState } from 'react';
-import { BookOpen, Check, Link2, LoaderCircle, RefreshCw, Save, X } from 'lucide-react';
+import { useEffect, useId, useState } from 'react';
+import { BookOpen, Check, Link2, LoaderCircle, RefreshCw, Save } from 'lucide-react';
 import ShelfButton from './ShelfButton';
+import ShelfDialog, { DialogTitle, DialogDescription } from './ShelfDialog';
 import { request } from './api';
 import type { Project } from './types';
 import { t } from './desktop-ui';
@@ -31,7 +32,6 @@ export function ProjectInstructionsButton({ project, onNotice, disabled = false 
 }
 
 export function ProjectInstructionsEditor({ project, onClose, onNotice }: Props & { onClose: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const descriptionId = useId();
   const tabsId = useId();
@@ -52,12 +52,6 @@ export function ProjectInstructionsEditor({ project, onClose, onNotice }: Props 
     setDrafts({ 'AGENTS.md': next.files['AGENTS.md'].content, 'CLAUDE.md': next.files['CLAUDE.md'].content });
   }
 
-  useEffect(() => {
-    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const element = dialog.current;
-    element?.showModal();
-    return () => { element?.close(); requestAnimationFrame(() => { if (previous?.isConnected) previous.focus(); }); };
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -105,13 +99,8 @@ export function ProjectInstructionsEditor({ project, onClose, onNotice }: Props 
     else onClose();
   }
 
-  return <dialog ref={dialog} className="project-instructions-dialog" data-slot="dialog-content" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId}
-    onCancel={event => { event.preventDefault(); close(); }} onClick={event => {
-      if (event.target !== event.currentTarget) return;
-      const rect = event.currentTarget.getBoundingClientRect();
-      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close();
-    }}>
-    <div data-slot="dialog-header"><h2 id={titleId}>{project.name} / 项目指令</h2><p id={descriptionId}>将项目的通用规则写入 AGENTS.md，再让 Claude 通过 CLAUDE.md 读取同一份规则。</p></div>
+  return <ShelfDialog className="project-instructions-dialog" onClose={close} locked={Boolean(busy)} aria-labelledby={titleId} aria-describedby={descriptionId}>
+    <div data-slot="dialog-header"><DialogTitle id={titleId} data-slot="dialog-title">{project.name} / 项目指令</DialogTitle><DialogDescription id={descriptionId} data-slot="dialog-description">将项目的通用规则写入 AGENTS.md，再让 Claude 通过 CLAUDE.md 读取同一份规则。</DialogDescription></div>
     <code className="project-instructions-path" title={snapshot?.projectPath || project.path}>{snapshot?.projectPath || project.path}</code>
     {error && <p className="project-instructions-error" role="alert">{error}</p>}
     {notice && <p className="project-instructions-notice" role="status">{notice}</p>}
@@ -134,6 +123,5 @@ export function ProjectInstructionsEditor({ project, onClose, onNotice }: Props 
     <div data-slot="dialog-footer">{discard ? <><ShelfButton variant="ghost" onClick={() => setDiscard(false)}>继续编辑</ShelfButton><ShelfButton variant="destructive" onClick={onClose}>放弃修改</ShelfButton></>
       : <><span className="project-instructions-unsaved">{dirty ? '有未保存的修改' : snapshot ? '没有未保存的修改' : ''}</span><ShelfButton variant="ghost" disabled={Boolean(busy)} onClick={close}>关闭</ShelfButton><ShelfButton disabled={Boolean(busy) || !current || current.readOnly || (!currentDirty && current.exists)} onClick={() => void save()}>{busy === 'save' ? <LoaderCircle className="spin" /> : <Save />}保存 {selected}</ShelfButton></>}
     </div>
-    <ShelfButton className="project-instructions-close" size="icon-sm" variant="ghost" aria-label="关闭" disabled={Boolean(busy)} onClick={close}><X /></ShelfButton>
-  </dialog>;
+  </ShelfDialog>;
 }

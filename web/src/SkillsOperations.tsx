@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { CircleArrowUp, CircleCheck, CircleDashed, CircleHelp, CircleX, LoaderCircle, RefreshCw, X } from 'lucide-react';
+import { CircleArrowUp, CircleCheck, CircleDashed, CircleHelp, CircleX, LoaderCircle, RefreshCw } from 'lucide-react';
 import { request } from './api';
 import ShelfButton from './ShelfButton';
+import ShelfDialog, { DialogTitle, DialogDescription } from './ShelfDialog';
 import type { Skill, Snapshot } from './types';
 import './newskills-operations.css';
 
@@ -150,16 +151,8 @@ export function useSkillsOperations(options: Options) {
 }
 
 function OperationDialog({ title, description, locked, onClose, className, children }: { title: string; description: string; locked: boolean; onClose: () => void; className: string; children: ReactNode }) {
-  const dialog = useRef<HTMLDialogElement>(null);
   const descriptionId = useId();
-  const returnFocus = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
-  const close = useRef(onClose); close.current = onClose;
-  useEffect(() => {
-    const element = dialog.current; element?.showModal();
-    return () => { element?.close(); const previous = returnFocus.current; requestAnimationFrame(() => { if (previous?.isConnected) previous.focus(); }); };
-  }, []);
-  return <dialog ref={dialog} className={`skill-operation-dialog ${className}`} data-slot="dialog-content" aria-modal="true" aria-label={title} aria-describedby={descriptionId} onCancel={event => { event.preventDefault(); if (!locked) close.current(); }}>
-    <header className="skill-operation-header" data-slot="dialog-header"><div><h2 data-slot="dialog-title">{title}</h2><p id={descriptionId} data-slot="dialog-description">{description}</p></div></header><button className="icon-button skill-operation-close" type="button" aria-label="关闭" disabled={locked} onClick={onClose}><X /></button>{children}
-  </dialog>;
+  return <ShelfDialog className={`skill-operation-dialog ${className}`} locked={locked} onClose={onClose} aria-describedby={descriptionId}>
+    <header className="skill-operation-header" data-slot="dialog-header"><div><DialogTitle data-slot="dialog-title">{title}</DialogTitle><DialogDescription id={descriptionId} data-slot="dialog-description">{description}</DialogDescription></div></header>{children}
+  </ShelfDialog>;
 }
-

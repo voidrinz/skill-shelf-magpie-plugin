@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useState, type ReactNode } from 'react';
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Download, ExternalLink, FolderOpen, LoaderCircle, Plus, RefreshCw, Search, ShieldCheck, X } from 'lucide-react';
 import ShelfButton from './ShelfButton';
+import ShelfDialog, { DialogTitle, DialogDescription } from './ShelfDialog';
 import ShelfSelect from './ShelfSelect';
 import { Input } from './ShelfForm';
 import { request } from './api';
@@ -20,12 +21,10 @@ const leaderboards = ['trending', 'hot', 'all'].map(id => ({ id, name: t(`deskto
 const sections = [...leaderboards, { id: 'topics', name: t('desktop.discover.native.topics.title') }, { id: 'official', name: t('desktop.discover.native.official.title') }];
 
 export function DiscoveryDialog({ title, description, locked = false, onClose, children, className = '' }: { title: string; description: string; locked?: boolean; onClose: () => void; children: ReactNode; className?: string }) {
-  const dialog = useRef<HTMLDialogElement>(null), descriptionId = useId();
-  const previous = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
-  useEffect(() => { dialog.current?.showModal(); return () => { dialog.current?.close(); if (previous.current?.isConnected) previous.current.focus(); }; }, []);
-  return <dialog ref={dialog} className={`discovery-dialog ${className}`} data-slot="dialog-content" aria-modal="true" aria-label={title} aria-describedby={descriptionId} onCancel={event => { event.preventDefault(); if (!locked) onClose(); }}>
-    <header className="discovery-dialog-header"><div><h2>{title}</h2><p id={descriptionId}>{description}</p></div><ShelfButton size="icon-sm" variant="ghost" aria-label="关闭" disabled={locked} onClick={onClose}><X /></ShelfButton></header>{children}
-  </dialog>;
+  const descriptionId = useId();
+  return <ShelfDialog className={`discovery-dialog ${className}`} locked={locked} onClose={onClose} aria-describedby={descriptionId}>
+    <header className="discovery-dialog-header" data-slot="dialog-header"><div><DialogTitle asChild><h2>{title}</h2></DialogTitle><DialogDescription asChild><p id={descriptionId}>{description}</p></DialogDescription></div></header>{children}
+  </ShelfDialog>;
 }
 
 export function InstallSourceButton(props: Props & { disabled?: boolean; label?: string }) {

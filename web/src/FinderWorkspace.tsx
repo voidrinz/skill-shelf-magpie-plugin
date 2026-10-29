@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import * as HoverCard from '@radix-ui/react-hover-card';
-import * as Tooltip from '@radix-ui/react-tooltip';
+import FinderTooltip from './ShelfTooltip';
 import { ArrowDown, ArrowUpDown, CircleAlert, CircleArrowUp, CircleCheck, CircleDashed, CircleHelp, CircleX, Boxes, Braces, ChevronDown, ChevronRight, ChevronUp, Columns3, Folder as FolderIcon, FolderInput, FolderOpen, FolderPlus, Grid2X2, HardDrive, Info, Languages, Link2, List, LoaderCircle, PackagePlus, PencilLine, RefreshCw, Rocket, Sparkles, Trash2 } from 'lucide-react';
 import { ContextMenu, DropdownMenu, PositionedMenu } from './ShelfMenu';
 import { useAiPreferences } from './ai-preferences';
@@ -449,7 +449,7 @@ export default function FinderWorkspace(props: Props) {
     </DropdownMenu.Root>
   </div>;
 
-  return <Tooltip.Provider delayDuration={300} skipDelayDuration={150}><div className="finder-workbench" data-testid="finder-workspace" data-view={filtering ? 'search' : view}>
+  return <div className="finder-workbench" data-testid="finder-workspace" data-view={filtering ? 'search' : view}>
     {arrangementTarget && createPortal(arrangementControls, arrangementTarget)}
     <div ref={container} className={`finder-browser${canvas ? ' finder-canvas-scroll' : ' finder-list-view'}`} data-view={view === 'columns' ? 'columns' : 'list'}
       role="listbox" aria-label={`${title} Finder 文件浏览器`} aria-multiselectable="true" tabIndex={0}
@@ -533,15 +533,7 @@ export default function FinderWorkspace(props: Props) {
         </ContextMenu.SubContent></ContextMenu.Sub></>}
       </>}
     </PositionedMenu>}
-  </div></Tooltip.Provider>;
-}
-
-function FinderTooltip({ children, content, className = '' }: { children: ReactNode; content: ReactNode; className?: string }) {
-  return <Tooltip.Root><Tooltip.Trigger asChild>{children}</Tooltip.Trigger><Tooltip.Portal>
-    <Tooltip.Content className={`finder-tooltip ${className}`} side="top" sideOffset={6}>
-      {content}<Tooltip.Arrow className="finder-tooltip-arrow" />
-    </Tooltip.Content>
-  </Tooltip.Portal></Tooltip.Root>;
+  </div>;
 }
 
 function SkillUpdateIndicator({ check }: { check: UpdateCheck }) {

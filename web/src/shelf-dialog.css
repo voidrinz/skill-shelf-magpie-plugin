@@ -1,0 +1,40 @@
+.shelf-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgb(0 0 0 / 45%);
+  backdrop-filter: blur(2px);
+  animation: shelf-dialog-reveal 150ms ease-out;
+}
+:root[data-theme='dark'] .shelf-dialog-overlay { background: rgb(0 0 0 / 70%); }
+.shelf-dialog[data-slot='dialog-content'] {
+  position: fixed;
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--border);
+  border-radius: var(--ss-radius-dialog);
+  color: var(--foreground);
+  background: var(--card);
+  box-shadow: var(--ss-shadow-menu);
+  animation: shelf-dialog-reveal 150ms ease-out;
+}
+:where(.shelf-dialog) { display: grid; width: calc(100% - 32px); max-width: 512px; gap: 20px; padding: 20px; }
+.shelf-dialog .modal-heading { align-items: flex-start; }
+.shelf-dialog .modal-heading h2 { font-size: 18px; font-weight: 600; line-height: 1.25; letter-spacing: normal; }
+.shelf-dialog .shelf-dialog-close { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; margin: 0; padding: 6px; border-radius: 8px; color: var(--muted-foreground); opacity: .8; }
+.shelf-dialog .shelf-dialog-close:hover { color: var(--foreground); background: var(--accent); opacity: 1; }
+.shelf-dialog .shelf-dialog-close:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.shelf-dialog .shelf-dialog-close:disabled { pointer-events: none; opacity: .5; }
+.shelf-dialog .shelf-dialog-close svg { width: 16px; height: 16px; }
+.shelf-dialog .modal-heading { padding-right: 28px; }
+.shelf-tooltip { z-index: 125; max-width: 256px; border-radius: 8px; color: var(--background); background: var(--foreground); padding: 6px 10px; font-size: 12px; font-weight: 500; line-height: 16px; box-shadow: var(--ss-shadow-menu); }
+.shelf-tooltip-arrow { fill: var(--foreground); }
+:where(.shelf-dialog [data-slot='dialog-title']) { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.25; }
+:where(.shelf-dialog [data-slot='dialog-description']) { margin: 0; color: var(--muted-foreground); font-size: 14px; line-height: 1.625; }
+@media (min-width: 640px) { :where(.shelf-dialog) { padding: 24px; } }
+@keyframes shelf-dialog-reveal { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .shelf-dialog-overlay, .shelf-dialog[data-slot='dialog-content'] { animation: none; } }

@@ -1,3 +1,5 @@
+import ShelfButton from './ShelfButton';
+import ShelfSwitch from './ShelfSwitch';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Boxes, Check, ChevronDown, ChevronUp, Loader2, RefreshCw, Sparkles } from 'lucide-react';
 import * as Select from '@radix-ui/react-select';
@@ -69,9 +71,9 @@ export default function AiSettings({ section, onNotice, onError }: Props) {
   if (section === 'ai-provider') return <div className="ai-provider-browser" data-testid="settings-ai-provider">
     <aside aria-label="服务商"><p>服务商</p><button type="button" aria-current="page"><span className="ai-provider-mark"><Sparkles /></span><span><strong>Magpie</strong><small>{preferences.enabled ? readiness : '已配置 · 已停用'}</small></span><i data-configured={preferences.enabled && status?.available} /></button></aside>
     <div className="settings-page"><header className="settings-page-header"><h2>Magpie</h2><span className={preferences.enabled && status?.available ? 'is-success' : 'is-muted'}>{preferences.enabled ? readiness : '已配置 · 已停用'}</span></header>
-      <div className="ai-provider-form"><section className="ai-provider-section"><h3>服务状态</h3><div className="setting-rows"><SettingsRow label="启用 Magpie" description="停用后仍保留配置，但这个服务不会出现在模型选择和 AI 请求中。"><button type="button" data-slot="switch" data-state={preferences.enabled ? 'checked' : 'unchecked'} role="switch" aria-label="启用 AI 功能" aria-checked={preferences.enabled} className={`setting-switch${preferences.enabled ? ' is-enabled' : ''}`} onClick={() => { try { saveAiPreferences({ enabled: !preferences.enabled }); } catch (error) { onError(errorMessage(error)); } }}><span /></button></SettingsRow></div></section>
+      <div className="ai-provider-form"><section className="ai-provider-section"><h3>服务状态</h3><div className="setting-rows"><SettingsRow label="启用 Magpie" description="停用后仍保留配置，但这个服务不会出现在模型选择和 AI 请求中。"><ShelfSwitch aria-label="启用 AI 功能" checked={preferences.enabled} onCheckedChange={enabled => { try { saveAiPreferences({ enabled }); } catch (error) { onError(errorMessage(error)); } }} /></SettingsRow></div></section>
       <section className="ai-provider-section"><h3>模型连接</h3><div className="setting-rows"><SettingsRow label="连接状态" description="服务商、账号和模型请在 Magpie 中管理。"><span role="status">{loading ? '正在连接…' : status?.available ? '已连接' : statusError || status?.reason || '尚未连接'}</span></SettingsRow></div></section></div>
-      <section className="ai-provider-section"><div className="ai-provider-section-heading"><div><h3>模型清单</h3><p>已启用的模型会进入默认模型选择。</p></div><button className="secondary-button" data-slot="button" data-size="sm" onClick={() => setRevision(value => value + 1)} disabled={loading}>{loading ? <Loader2 className="spin" /> : <RefreshCw />}刷新模型</button></div><div className="ai-provider-models">{models.length ? models.map(model => <div key={model.id}><span><strong>{model.name || model.id}</strong><small>{model.id}</small></span><div><span className="ai-model-verification" data-state="available">已启用</span></div></div>) : <div><span className="settings-page-description">{loading ? '正在读取模型列表…' : '暂无可用模型，请在 Magpie 中启用模型后刷新。'}</span></div>}</div></section>
+      <section className="ai-provider-section"><div className="ai-provider-section-heading"><div><h3>模型清单</h3><p>已启用的模型会进入默认模型选择。</p></div><ShelfButton variant="outline" size="sm" data-slot="button" data-size="sm" onClick={() => setRevision(value => value + 1)} disabled={loading}>{loading ? <Loader2 className="spin" /> : <RefreshCw />}刷新模型</ShelfButton></div><div className="ai-provider-models">{models.length ? models.map(model => <div key={model.id}><span><strong>{model.name || model.id}</strong><small>{model.id}</small></span><div><span className="ai-model-verification" data-state="available">已启用</span></div></div>) : <div><span className="settings-page-description">{loading ? '正在读取模型列表…' : '暂无可用模型，请在 Magpie 中启用模型后刷新。'}</span></div>}</div></section>
     </div>
   </div>;
   return <div className="settings-page" data-testid={`settings-${section}`}>
@@ -85,14 +87,14 @@ export default function AiSettings({ section, onNotice, onError }: Props) {
         <SettingsRow label="描述与翻译模型" description="用于生成简洁描述和翻译，强调稳定、准确的措辞。">{modelPicker('translationModel', '描述与翻译模型')}</SettingsRow>
       </div>}
       {[draft.chatModel, draft.summaryModel, draft.translationModel].some(model => model && !models.some(available => available.id === model)) && !loading && <p className="settings-page-description" role="alert">已保存的模型暂不可用，请重新选择。</p>}
-      <div className="ai-settings-actions is-end"><button className="primary-button" data-slot="button" data-size="sm" onClick={save} disabled={loading || !resolveAiModel(draft.chatModel, models) || !resolveAiModel(draft.summaryModel, models) || !resolveAiModel(draft.translationModel, models)}>保存默认模型</button></div>
+      <div className="ai-settings-actions is-end"><ShelfButton variant="default" size="sm" data-slot="button" data-size="sm" onClick={save} disabled={loading || !resolveAiModel(draft.chatModel, models) || !resolveAiModel(draft.summaryModel, models) || !resolveAiModel(draft.translationModel, models)}>保存默认模型</ShelfButton></div>
     </> : <>
       <p className="settings-page-description">设置总结和翻译的默认语言与上下文。</p>
       <section className="settings-section"><h3>AI 行为</h3><div className="setting-rows">
         <SettingsRow label="默认输出语言" description="除非另选翻译目标，否则助手会使用这个语言。"><ShelfSelect className="setting-select" aria-label="默认输出语言" value={draft.targetLanguage} onValueChange={value => setDraft(current => ({ ...current, targetLanguage: value }))} options={aiLanguages.map(([value, label]) => ({ value, label }))} /></SettingsRow>
         <SettingsRow label="上下文范围" description="选择总结时使用的 Skill 文本范围。"><ShelfSelect className="setting-select" aria-label="上下文范围" value={draft.summaryContext} onValueChange={value => setDraft(current => ({ ...current, summaryContext: value as AiPreferences['summaryContext'] }))} options={[{ value: 'skill-md', label: '仅 SKILL.md' }, { value: 'description', label: '仅原始描述' }]} /></SettingsRow>
       </div></section>
-      <div className="ai-settings-actions is-end"><button className="primary-button" data-slot="button" data-size="sm" onClick={save}>保存 AI 设置</button></div>
+      <div className="ai-settings-actions is-end"><ShelfButton variant="default" size="sm" data-slot="button" data-size="sm" onClick={save}>保存 AI 设置</ShelfButton></div>
       <details className="settings-privacy-note"><summary>隐私与费用</summary><p>仅在你主动发送对话、生成描述、分析或翻译时调用模型。对话可以附上所选 Skill 的 SKILL.md 和会话内容；生成描述与分析使用所选 Skill 文本，描述翻译只发送原始描述。内容经 Magpie 发送给所选模型服务，并按该服务计费。</p></details>
     </>}
   </div>;

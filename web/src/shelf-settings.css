@@ -912,8 +912,9 @@
 .shortcut-keys [data-slot='kbd'] { display: inline-flex; align-items: center; justify-content: center; line-height: 1; white-space: nowrap; }
 .setting-switch { display: inline-flex; width: 36px; height: 20px; flex: 0 0 auto; align-items: center; border: 1px solid transparent; border-radius: 999px; padding: 0; background: var(--input); outline: none; transition: background-color 150ms; }
 .setting-switch > span { display: block; width: 16px; height: 16px; flex: 0 0 auto; border-radius: 999px; background: var(--background); box-shadow: 0 1px 2px rgb(0 0 0 / 5%); transition: transform 150ms; }
-.setting-switch.is-enabled { background: var(--primary); }
-.setting-switch.is-enabled > span { transform: translateX(16px); }
+.setting-switch[data-state='checked'] { background: var(--primary); }
+.setting-switch[data-state='checked'] > span { transform: translateX(16px); }
+.setting-switch:disabled { cursor: not-allowed; opacity: .5; }
 .setting-switch:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 40%, transparent); }
 .settings-workspace [data-slot='button'] { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; height: 32px; min-height: 32px; gap: 4px; border: 1px solid transparent; border-radius: var(--ss-radius-control); padding: 0 12px; font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap; text-decoration: none; }
 .settings-workspace [data-slot='button']:has(> svg) { padding-inline: 10px; }
@@ -928,18 +929,13 @@
 .settings-ghost-button:hover { color: var(--foreground); background: var(--accent); }
 .settings-badge { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 4px; border: 1px solid transparent; border-radius: 8px; color: var(--secondary-foreground); background: var(--secondary); padding: 0 8px; font-size: 12px; font-weight: 500; line-height: 1; }
 .settings-badge.is-outline { border-color: var(--border); color: var(--foreground); background: var(--background); }
-.agent-focus-dialog { position: fixed; inset: 0; max-height: calc(100dvh - 32px); border: 0; border-radius: 16px; color: var(--foreground); background: var(--card); padding: 24px; box-shadow: var(--ss-shadow-menu); }
-.agent-focus-dialog[open] { display: grid; }
+.agent-focus-dialog { max-height: calc(100dvh - 32px); }
+.agent-focus-dialog { display: grid; }
 .agent-focus-dialog .agent-focus-list { min-height: 0; }
-.agent-focus-dialog::backdrop { background: rgb(0 0 0 / 45%); backdrop-filter: blur(2px); }
-:root[data-theme='dark'] .agent-focus-dialog::backdrop { background: rgb(0 0 0 / 70%); }
 .agent-focus-dialog [data-slot='dialog-header'] { display: flex; flex-direction: column; gap: 6px; padding-right: 24px; }
 .agent-focus-dialog [data-slot='dialog-title'] { margin: 0; font-weight: 600; line-height: 1.25; }
 .agent-focus-dialog [data-slot='dialog-description'] { margin: 0; color: var(--muted-foreground); line-height: 1.625; }
 .agent-focus-dialog [data-slot='dialog-footer'] { display: flex; gap: 8px; }
-.settings-dialog-close { position: absolute; right: 16px; top: 16px; border: 0; border-radius: 8px; color: var(--muted-foreground); background: transparent; padding: 6px; opacity: .8; }
-.settings-dialog-close svg { width: 16px; height: 16px; }
-.settings-dialog-close:hover { opacity: 1; color: var(--foreground); background: var(--accent); }
 :root .agent-focus-search-field .shelf-input[data-slot='input'] { height: 32px; padding-right: 34px; padding-left: 31px; font-size: .73rem; }
 .settings-workspace .source-row { margin: 0; padding: .65rem .75rem; }
 .settings-workspace .source-row + .source-row { border-top: 1px solid var(--settings-border); }

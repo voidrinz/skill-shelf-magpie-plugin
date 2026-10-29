@@ -1200,19 +1200,6 @@ html[data-density='compact'] .finder-list-view[data-view='columns'] {
 }
 
 /* Desktop UI primitives rely on Tailwind's reset; scope their browser adapter here. */
-.finder-tooltip {
-  z-index: 125;
-  max-width: 256px;
-  border-radius: 8px;
-  color: var(--background);
-  background: var(--foreground);
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-  box-shadow: var(--ss-shadow-menu);
-}
-.finder-tooltip-arrow { fill: var(--foreground); }
 .skill-update-tooltip {
   display: grid;
   max-width: 250px;
