@@ -1,6 +1,6 @@
 import http from 'node:http';
 import { randomBytes, timingSafeEqual, createHash } from 'node:crypto';
-import { readFile, realpath, stat } from 'node:fs/promises';
+import { mkdir, readFile, realpath, stat, writeFile } from 'node:fs/promises';
 import { resolve, relative, isAbsolute, extname } from 'node:path';
 import { execFile } from 'node:child_process';
 import { VERSION, DESKTOP_BASELINE } from './version.mjs';
@@ -22,22 +22,24 @@ function httpError(status, message) {
   return Object.assign(new Error(message), { status });
 }
 
-function headers(response) {
+function headers(response, embeddedBase) {
+  const own = embeddedBase || "'self'";
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('Referrer-Policy', 'no-referrer');
-  response.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
-  response.setHeader('X-Frame-Options', 'DENY');
+  response.setHeader('Cross-Origin-Resource-Policy', embeddedBase ? 'cross-origin' : 'same-origin');
+  if (embeddedBase) response.removeHeader('X-Frame-Options');
+  else response.setHeader('X-Frame-Options', 'DENY');
   response.setHeader('Content-Security-Policy', [
-    "default-src 'self'",
-    "script-src 'self'",
-    "style-src 'self' 'unsafe-inline'",
-    "font-src 'self'",
-    "img-src 'self' data:",
-    "connect-src 'self'",
+    `default-src ${own}`,
+    `script-src ${own}`,
+    `style-src ${own} 'unsafe-inline'`,
+    `font-src ${own}`,
+    `img-src ${own} data:`,
+    `connect-src ${own}`,
     "object-src 'none'",
     "base-uri 'none'",
-    "frame-ancestors 'none'",
+    ...(!embeddedBase ? ["frame-ancestors 'none'"] : []),
     "form-action 'self'",
   ].join('; '));
 }
@@ -91,6 +93,7 @@ export async function startServer({ service, ai, assistant, skills, sync, access
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw httpError(400, 'Invalid port.');
   if (!service || !webDir) throw new Error('A service and web directory are required.');
   const token = randomBytes(32).toString('hex');
+  const embedPath = `/_magpie/${randomBytes(32).toString('hex')}/`;
   const webRoot = await realpath(webDir);
   const snapshot = await service.snapshot();
   const profile = createHash('sha256').update(snapshot.dataDir).digest('hex');
@@ -102,13 +105,28 @@ export async function startServer({ service, ai, assistant, skills, sync, access
       const host = request.headers.host;
       const hosts = [`127.0.0.1:${actualPort}`, `localhost:${actualPort}`];
       if (!hosts.includes(host)) throw httpError(403, 'Only the local workbench host is allowed.');
+      const url = new URL(request.url, `http://${host}`);
+      const embedded = url.pathname.startsWith(embedPath);
+      if (embedded) {
+        headers(response, `http://${host}${embedPath}`);
+        url.pathname = '/' + url.pathname.slice(embedPath.length);
+        if (request.headers.origin === 'null') {
+          response.setHeader('Access-Control-Allow-Origin', 'null');
+          response.setHeader('Vary', 'Origin');
+        }
+        if (request.method === 'OPTIONS' && request.headers.origin === 'null') {
+          response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+          response.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Shelf-Token');
+          response.writeHead(204);
+          return response.end();
+        }
+      }
       const origins = [...hosts.map((value) => `http://${value}`), ...allowedOrigins];
-      if (request.headers.origin && !origins.includes(request.headers.origin)) {
+      if (request.headers.origin && !origins.includes(request.headers.origin) && !(embedded && request.headers.origin === 'null')) {
         throw httpError(403, 'Cross-origin requests are not allowed.');
       }
-      const url = new URL(request.url, `http://${host}`);
       const api = url.pathname.startsWith('/api/') || url.pathname === '/_identity';
-      if (api && request.headers['sec-fetch-site'] === 'cross-site') {
+      if (api && request.headers['sec-fetch-site'] === 'cross-site' && !embedded) {
         throw httpError(403, 'Cross-site requests are not allowed.');
       }
       if (request.method === 'OPTIONS') throw httpError(403, 'Cross-origin requests are not allowed.');
@@ -116,7 +134,7 @@ export async function startServer({ service, ai, assistant, skills, sync, access
         return json(response, 200, { product: 'skill-shelf-magpie-plugin', profile, version: VERSION, desktopBaseline: DESKTOP_BASELINE });
       }
       if (request.method === 'GET' && url.pathname === '/api/session') {
-        return json(response, 200, { token });
+        return json(response, 200, { token, ...(!embedded ? { embedUrl: `http://127.0.0.1:${actualPort}${embedPath}` } : {}) });
       }
       if (url.pathname.startsWith('/api/')) {
         if (!matchesToken(request.headers['x-shelf-token'], token)) {
@@ -127,6 +145,37 @@ export async function startServer({ service, ai, assistant, skills, sync, access
         const operation = `${method} ${parts.slice(0, 2).join('/')}`;
         let result;
         switch (operation) {
+          case 'GET api/window-storage':
+            if (parts.length === 2) result = service.state.windowStorage ?? {};
+            break;
+          case 'PUT api/window-storage':
+            if (parts.length === 2) {
+              const values = await body(request, 1024 * 1024);
+              if (Object.entries(values).some(([key, value]) => !key.startsWith('shelf-') || typeof value !== 'string')) throw httpError(400, 'Invalid window preferences.');
+              result = await service.mutate(async () => { service.state.windowStorage = values; });
+            }
+            break;
+          case 'POST api/open-url':
+            if (parts.length === 2) {
+              const target = new URL((await body(request)).url);
+              if (!['http:', 'https:'].includes(target.protocol)) throw httpError(400, 'Only web links can be opened.');
+              await opener(target.href);
+              result = { ok: true };
+            }
+            break;
+          case 'POST api/exports':
+            if (parts.length === 2) {
+              const input = await body(request);
+              if (!['pack', 'sync'].includes(input.type)) throw httpError(400, 'Unknown export type.');
+              const document = input.type === 'pack' ? (sync ? await sync.exportPack(input.id) : await service.exportPack(input.id)) : await sync.exportDocument();
+              const directory = resolve(snapshot.dataDir, 'exports');
+              await mkdir(directory, { recursive: true, mode: 0o700 });
+              const file = resolve(directory, `skill-shelf-${Date.now()}-${randomBytes(4).toString('hex')}.skill-shelf-${input.type}.json`);
+              await writeFile(file, JSON.stringify(document, null, 2), { mode: 0o600, flag: 'wx' });
+              await opener(directory);
+              result = { file };
+            }
+            break;
           case 'GET api/state':
             if (parts.length === 2) result = await service.snapshot();
             break;
@@ -357,7 +406,7 @@ export async function startServer({ service, ai, assistant, skills, sync, access
       }
       if (!['GET', 'HEAD'].includes(request.method)) throw httpError(405, 'Method not allowed.');
       let raw;
-      try { raw = decodeURIComponent((request.url || '/').split('?')[0]); }
+      try { raw = decodeURIComponent(embedded ? '/' + request.url.split('?')[0].slice(embedPath.length) : (request.url || '/').split('?')[0]); }
       catch { throw httpError(400, 'Invalid path.'); }
       if (raw.includes('\\') || raw.includes('\0') || raw.split('/').some((part) => part === '..' || part === '.')) {
         throw httpError(400, 'Invalid path.');

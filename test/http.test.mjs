@@ -285,6 +285,42 @@ test('HTTP session blocks CSRF, DNS rebinding and unauthenticated data access', 
   assert.equal((await shelf.api('/api/state')).data.packs.length, 1);
 });
 
+test('Magpie sandbox requests use a private path and retain authenticated operations', async t => {
+  const opened = [];
+  const shelf = await setup(t, { opener: async target => { opened.push(target); } });
+  const { embedUrl } = await (await fetch(`${shelf.base}/api/session`)).json();
+  const headers = { Origin: 'null', 'Sec-Fetch-Site': 'cross-site' };
+  const entry = await fetch(embedUrl, { headers });
+  assert.equal(entry.status, 200);
+  assert.equal(entry.headers.get('x-frame-options'), null);
+  assert.equal(entry.headers.get('access-control-allow-origin'), 'null');
+  assert.equal((await fetch(shelf.base)).headers.get('x-frame-options'), 'DENY');
+  const wrong = await fetch(`${shelf.base}/_magpie/${'0'.repeat(64)}/api/session`, { headers });
+  assert.equal(wrong.status, 403);
+  assert.equal(wrong.headers.get('access-control-allow-origin'), null);
+  const session = await (await fetch(`${embedUrl}api/session`, { headers })).json();
+  assert.equal(session.token, shelf.token);
+  assert.equal((await fetch(`${embedUrl}api/state`, { headers })).status, 403);
+  const preflight = await fetch(`${embedUrl}api/window-storage`, { method: 'OPTIONS', headers: { ...headers, 'Access-Control-Request-Method': 'PUT', 'Access-Control-Request-Headers': 'content-type,x-shelf-token' } });
+  assert.equal(preflight.status, 204);
+  const embeddedRequest = (route, body) => fetch(`${embedUrl}api/${route}`, {
+    method: route === 'window-storage' ? 'PUT' : 'POST',
+    headers: { ...headers, 'X-Shelf-Token': shelf.token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  assert.equal((await embeddedRequest('window-storage', { 'shelf-theme': '"dark"' })).status, 200);
+  assert.equal(JSON.parse(await readFile(shelf.service.stateFile, 'utf8')).windowStorage['shelf-theme'], '"dark"');
+  for (const type of ['pack', 'sync']) {
+    const exported = await embeddedRequest('exports', { type, id: 'default' });
+    assert.equal(exported.status, 200);
+    const { file } = await exported.json();
+    assert.equal(path.dirname(file), path.join(shelf.dataDir, 'exports'));
+    assert.equal(typeof JSON.parse(await readFile(file, 'utf8')), 'object');
+  }
+  assert.equal((await embeddedRequest('open-url', { url: 'https://skills.sh/' })).status, 200);
+  assert.deepEqual(opened, [path.join(shelf.dataDir, 'exports'), path.join(shelf.dataDir, 'exports'), 'https://skills.sh/']);
+});
+
 test('HTTP validates JSON, body size, unknown endpoints and static path containment', async (t) => {
   const shelf = await setup(t);
   const request = (body, contentType = 'application/json') => fetch(`${shelf.base}/api/packs`, {

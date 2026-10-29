@@ -3,6 +3,10 @@ import { readdir, readFile, writeFile, realpath, mkdir, copyFile } from 'node:fs
 import { join, dirname } from 'node:path';
 import { createRequire } from 'node:module';
 
+await mkdir('dist/page', { recursive: true });
+for (const file of ['index.html', 'boot.js', '.npmignore']) await copyFile(join('page', file), join('dist/page', file));
+await copyFile('web/public/brand.svg', 'dist/page/brand.svg');
+
 await build({
   entryPoints: { plugin: 'src/plugin.mjs', cli: 'src/cli.mjs' },
   outdir: 'dist',
