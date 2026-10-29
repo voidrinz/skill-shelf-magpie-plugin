@@ -1,0 +1,63 @@
+web/src/api.ts
+  s_ff602d022be9ff::t_f69c3ed917044f 4-5,8,20,39-42
+test/plugin-host.test.mjs
+  s_ff602d022be9ff::t_250bbb146d125b 74-75,83,98,112-115,117,183-184,196,251
+  s_ff602d022be9ff::t_f88d1df7bfe680 97,177,243
+web/src/magpie.ts
+  s_ff602d022be9ff::t_f69c3ed917044f 1-36
+src/version.mjs
+  s_ff602d022be9ff::t_caa5c0a2a8af22 1
+page/index.html
+  s_ff602d022be9ff::t_56a48abe91770d 1-18
+package.json
+  s_ff602d022be9ff::t_caa5c0a2a8af22 3
+  s_ff602d022be9ff::t_edef54d94452da 60
+  s_ff602d022be9ff::t_56a48abe91770d 40-44
+  s_ff602d022be9ff::t_0012551ee1cf11 61
+  s_ff602d022be9ff::t_e72c4691190967 55
+test/http.test.mjs
+  s_ff602d022be9ff::t_122c449dd3c807 288-323
+scripts/build.mjs
+  s_ff602d022be9ff::t_56a48abe91770d 6,8-9
+  s_ff602d022be9ff::t_2dbc559275642d 7
+src/plugin.mjs
+  s_ff602d022be9ff::t_45d3f52d023048 4
+  s_ff602d022be9ff::t_6145d4dc89aa80 57-61
+  s_ff602d022be9ff::t_ed3b0a98020751 80
+page/boot.js
+  s_ff602d022be9ff::t_56a48abe91770d 1-20
+web/index.html
+  s_ff602d022be9ff::t_56a48abe91770d 8
+vite.config.ts
+  s_ff602d022be9ff::t_56a48abe91770d 6
+test/magpie-entry-ui.spec.ts
+  s_ff602d022be9ff::t_53a13b0a41f4c3 2,5-6,14-22,25-31
+  s_ff602d022be9ff::t_258a33038cb1f5 3,9-13,23,32-34,36-57
+src/server.mjs
+  s_ff602d022be9ff::t_8387162d9fba93 31-32
+  s_ff602d022be9ff::t_62a8711d0a09e6 170
+  s_ff602d022be9ff::t_ad82c10bcd0c99 3,25-26,30,34-39,42,96,108-123,125,129,137,148-169,171-178,409
+.gitignore
+  s_ff602d022be9ff::t_56a48abe91770d 23
+  s_ff602d022be9ff::t_2dbc559275642d 24
+page/.npmignore
+  s_ff602d022be9ff::t_2dbc559275642d 1-2
+pnpm-lock.yaml
+  s_ff602d022be9ff::t_d66dfabe2b023a 20-22,35-40,465-477,731-743,1983-2005,2276-2289
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "324e9185d45c915cf859892f88d6052dcbf97104",
+  "prompts": {},
+  "sessions": {
+    "s_ff602d022be9ff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18563-15f8-74e1-a2b3-0093ffd7ed9e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
