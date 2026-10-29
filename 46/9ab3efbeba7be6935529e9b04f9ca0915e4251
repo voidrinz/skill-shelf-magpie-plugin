@@ -1,0 +1,29 @@
+FEATURE_PARITY.md
+  s_ff602d022be9ff::t_f88d1df7bfe680 15,28
+  s_ff602d022be9ff::t_caa5c0a2a8af22 4,7-8
+  s_ff602d022be9ff::t_edef54d94452da 14
+CHANGELOG.md
+  s_ff602d022be9ff::t_caa5c0a2a8af22 3-9
+README.md
+  s_ff602d022be9ff::t_caa5c0a2a8af22 20
+  s_ff602d022be9ff::t_f88d1df7bfe680 5,50,52,54-56,62,121,129,131,137
+README.en.md
+  s_ff602d022be9ff::t_caa5c0a2a8af22 20
+  s_ff602d022be9ff::t_f88d1df7bfe680 7,50,52,54-56,62,125,133,135,141
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "469ab3efbeba7be6935529e9b04f9ca0915e4251",
+  "prompts": {},
+  "sessions": {
+    "s_ff602d022be9ff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18563-15f8-74e1-a2b3-0093ffd7ed9e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Rin <voidrinfx@gmail.com>"
+    }
+  }
+}
