@@ -7365,14 +7365,14 @@ var require_dist = __commonJS({
 import { homedir as homedir4 } from "node:os";
 import { dirname as dirname6, join as join8, resolve as resolve6 } from "node:path";
 import { fileURLToPath as fileURLToPath3 } from "node:url";
-import { readFile as readFile7 } from "node:fs/promises";
+import { readFile as readFile7, writeFile as writeFile7, rename as rename5 } from "node:fs/promises";
 
 // src/runtime.mjs
 import { spawn as spawn2 } from "node:child_process";
 import { homedir as homedir3 } from "node:os";
 import { dirname as dirname5, resolve as resolve5, join as join7, isAbsolute as isAbsolute6 } from "node:path";
 import { fileURLToPath as fileURLToPath2 } from "node:url";
-import { access as access2, link as link2, mkdir as mkdir5, readFile as readFile6, realpath as realpath6, rename as rename4, unlink as unlink2, writeFile as writeFile5 } from "node:fs/promises";
+import { access as access2, link as link2, mkdir as mkdir6, readFile as readFile6, realpath as realpath6, rename as rename4, unlink as unlink2, writeFile as writeFile6 } from "node:fs/promises";
 import { createHash as createHash10, randomUUID as randomUUID10 } from "node:crypto";
 
 // src/domain.mjs
@@ -9439,7 +9439,7 @@ function getBaseLanguage(locale2) {
 }
 
 // src/version.mjs
-var VERSION = "0.1.14";
+var VERSION = "0.1.15";
 var DESKTOP_BASELINE = "0.1.14";
 var USER_AGENT = `skill-shelf/${VERSION}`;
 
@@ -13854,7 +13854,7 @@ function parseSyncSource(value) {
 // src/server.mjs
 import http from "node:http";
 import { randomBytes, timingSafeEqual, createHash as createHash9 } from "node:crypto";
-import { readFile as readFile5, realpath as realpath5, stat as stat2 } from "node:fs/promises";
+import { mkdir as mkdir5, readFile as readFile5, realpath as realpath5, stat as stat2, writeFile as writeFile5 } from "node:fs/promises";
 import { resolve as resolve4, relative as relative4, isAbsolute as isAbsolute5, extname } from "node:path";
 import { execFile as execFile2 } from "node:child_process";
 var MAX_BODY = 101 * 1024 * 1024;
@@ -13870,22 +13870,24 @@ var TYPES = {
 function httpError(status, message) {
   return Object.assign(new Error(message), { status });
 }
-function headers2(response) {
+function headers2(response, embeddedBase) {
+  const own2 = embeddedBase || "'self'";
   response.setHeader("Cache-Control", "no-store");
   response.setHeader("X-Content-Type-Options", "nosniff");
   response.setHeader("Referrer-Policy", "no-referrer");
-  response.setHeader("Cross-Origin-Resource-Policy", "same-origin");
-  response.setHeader("X-Frame-Options", "DENY");
+  response.setHeader("Cross-Origin-Resource-Policy", embeddedBase ? "cross-origin" : "same-origin");
+  if (embeddedBase) response.removeHeader("X-Frame-Options");
+  else response.setHeader("X-Frame-Options", "DENY");
   response.setHeader("Content-Security-Policy", [
-    "default-src 'self'",
-    "script-src 'self'",
-    "style-src 'self' 'unsafe-inline'",
-    "font-src 'self'",
-    "img-src 'self' data:",
-    "connect-src 'self'",
+    `default-src ${own2}`,
+    `script-src ${own2}`,
+    `style-src ${own2} 'unsafe-inline'`,
+    `font-src ${own2}`,
+    `img-src ${own2} data:`,
+    `connect-src ${own2}`,
     "object-src 'none'",
     "base-uri 'none'",
-    "frame-ancestors 'none'",
+    ...!embeddedBase ? ["frame-ancestors 'none'"] : [],
     "form-action 'self'"
   ].join("; "));
 }
@@ -13933,6 +13935,7 @@ async function startServer({ service, ai, assistant, skills, sync, access: acces
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw httpError(400, "Invalid port.");
   if (!service || !webDir) throw new Error("A service and web directory are required.");
   const token = randomBytes(32).toString("hex");
+  const embedPath = `/_magpie/${randomBytes(32).toString("hex")}/`;
   const webRoot = await realpath5(webDir);
   const snapshot = await service.snapshot();
   const profile = createHash9("sha256").update(snapshot.dataDir).digest("hex");
@@ -13943,13 +13946,28 @@ async function startServer({ service, ai, assistant, skills, sync, access: acces
       const host = request.headers.host;
       const hosts = [`127.0.0.1:${actualPort}`, `localhost:${actualPort}`];
       if (!hosts.includes(host)) throw httpError(403, "Only the local workbench host is allowed.");
+      const url = new URL(request.url, `http://${host}`);
+      const embedded = url.pathname.startsWith(embedPath);
+      if (embedded) {
+        headers2(response, `http://${host}${embedPath}`);
+        url.pathname = "/" + url.pathname.slice(embedPath.length);
+        if (request.headers.origin === "null") {
+          response.setHeader("Access-Control-Allow-Origin", "null");
+          response.setHeader("Vary", "Origin");
+        }
+        if (request.method === "OPTIONS" && request.headers.origin === "null") {
+          response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+          response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Shelf-Token");
+          response.writeHead(204);
+          return response.end();
+        }
+      }
       const origins = [...hosts.map((value) => `http://${value}`), ...allowedOrigins];
-      if (request.headers.origin && !origins.includes(request.headers.origin)) {
+      if (request.headers.origin && !origins.includes(request.headers.origin) && !(embedded && request.headers.origin === "null")) {
         throw httpError(403, "Cross-origin requests are not allowed.");
       }
-      const url = new URL(request.url, `http://${host}`);
       const api = url.pathname.startsWith("/api/") || url.pathname === "/_identity";
-      if (api && request.headers["sec-fetch-site"] === "cross-site") {
+      if (api && request.headers["sec-fetch-site"] === "cross-site" && !embedded) {
         throw httpError(403, "Cross-site requests are not allowed.");
       }
       if (request.method === "OPTIONS") throw httpError(403, "Cross-origin requests are not allowed.");
@@ -13957,7 +13975,7 @@ async function startServer({ service, ai, assistant, skills, sync, access: acces
         return json(response, 200, { product: "skill-shelf-magpie-plugin", profile, version: VERSION, desktopBaseline: DESKTOP_BASELINE });
       }
       if (request.method === "GET" && url.pathname === "/api/session") {
-        return json(response, 200, { token });
+        return json(response, 200, { token, ...!embedded ? { embedUrl: `http://127.0.0.1:${actualPort}${embedPath}` } : {} });
       }
       if (url.pathname.startsWith("/api/")) {
         if (!matchesToken(request.headers["x-shelf-token"], token)) {
@@ -13968,6 +13986,39 @@ async function startServer({ service, ai, assistant, skills, sync, access: acces
         const operation = `${method} ${parts.slice(0, 2).join("/")}`;
         let result;
         switch (operation) {
+          case "GET api/window-storage":
+            if (parts.length === 2) result = service.state.windowStorage ?? {};
+            break;
+          case "PUT api/window-storage":
+            if (parts.length === 2) {
+              const values = await body(request, 1024 * 1024);
+              if (Object.entries(values).some(([key, value]) => !key.startsWith("shelf-") || typeof value !== "string")) throw httpError(400, "Invalid window preferences.");
+              result = await service.mutate(async () => {
+                service.state.windowStorage = values;
+              });
+            }
+            break;
+          case "POST api/open-url":
+            if (parts.length === 2) {
+              const target = new URL((await body(request)).url);
+              if (!["http:", "https:"].includes(target.protocol)) throw httpError(400, "Only web links can be opened.");
+              await opener(target.href);
+              result = { ok: true };
+            }
+            break;
+          case "POST api/exports":
+            if (parts.length === 2) {
+              const input = await body(request);
+              if (!["pack", "sync"].includes(input.type)) throw httpError(400, "Unknown export type.");
+              const document = input.type === "pack" ? sync ? await sync.exportPack(input.id) : await service.exportPack(input.id) : await sync.exportDocument();
+              const directory = resolve4(snapshot.dataDir, "exports");
+              await mkdir5(directory, { recursive: true, mode: 448 });
+              const file2 = resolve4(directory, `skill-shelf-${Date.now()}-${randomBytes(4).toString("hex")}.skill-shelf-${input.type}.json`);
+              await writeFile5(file2, JSON.stringify(document, null, 2), { mode: 384, flag: "wx" });
+              await opener(directory);
+              result = { file: file2 };
+            }
+            break;
           case "GET api/state":
             if (parts.length === 2) result = await service.snapshot();
             break;
@@ -14221,7 +14272,7 @@ async function startServer({ service, ai, assistant, skills, sync, access: acces
       if (!["GET", "HEAD"].includes(request.method)) throw httpError(405, "Method not allowed.");
       let raw;
       try {
-        raw = decodeURIComponent((request.url || "/").split("?")[0]);
+        raw = decodeURIComponent(embedded ? "/" + request.url.split("?")[0].slice(embedPath.length) : (request.url || "/").split("?")[0]);
       } catch {
         throw httpError(400, "Invalid path.");
       }
@@ -14333,7 +14384,7 @@ async function openOnce(url, dataDir) {
   }, ".browser-open.lock");
 }
 async function startWorkbench({ dataDir, homeDir = homedir3(), magpieDir, port = DEFAULT_PORT, dev = false, autoPort = !dev }) {
-  await mkdir5(dataDir, { recursive: true, mode: 448 });
+  await mkdir6(dataDir, { recursive: true, mode: 448 });
   const service = new ShelfService({ dataDir, homeDir, magpieDir });
   await service.initialize();
   const ai = new AIBridge({ service, magpieDir: magpieDir || defaultMagpieDir(homeDir) });
@@ -14386,7 +14437,7 @@ async function peerAt(port, dataDir) {
 async function atomicWrite(file, text2) {
   const temporary = `${file}.${randomUUID10()}.tmp`;
   try {
-    await writeFile5(temporary, text2, { mode: 384, flag: "wx" });
+    await writeFile6(temporary, text2, { mode: 384, flag: "wx" });
     await rename4(temporary, file);
   } finally {
     await unlink2(temporary).catch(() => {
@@ -14396,7 +14447,7 @@ async function atomicWrite(file, text2) {
 async function withProfileLock(dataDir, action, name = ".workbench-start.lock") {
   const lock = join7(dataDir, name);
   const claim = `${lock}.${randomUUID10()}.tmp`;
-  await writeFile5(claim, JSON.stringify({ pid: process.pid, id: randomUUID10() }), { mode: 384, flag: "wx" });
+  await writeFile6(claim, JSON.stringify({ pid: process.pid, id: randomUUID10() }), { mode: 384, flag: "wx" });
   const deadline = Date.now() + 15e3;
   async function acquire(file) {
     for (; ; ) {
@@ -14457,7 +14508,7 @@ async function writeLauncher(dataDir, url) {
 }
 async function connectWorkbench(settings) {
   const { dataDir, port = DEFAULT_PORT } = settings;
-  await mkdir5(dataDir, { recursive: true, mode: 448 });
+  await mkdir6(dataDir, { recursive: true, mode: 448 });
   const recordFile = join7(dataDir, ".workbench.json");
   return withProfileLock(dataDir, async () => {
     let record5;
@@ -14556,6 +14607,12 @@ async function SkillShelfPlugin(input = {}, options = {}) {
       }
       const connected = await connectWorkbench(settings);
       current.app = connected.app;
+      const session = await (await fetch(`${connected.url}/api/session`)).json();
+      const connectionFile = join8(packageDir, "dist/page/connection.js");
+      const temporary = `${connectionFile}.${process.pid}.tmp`;
+      await writeFile7(temporary, `window.skillShelfConnection = ${JSON.stringify(session.embedUrl)};
+`, { mode: 384 });
+      await rename5(temporary, connectionFile);
       if (current.url !== connected.url) {
         current.url = connected.url;
         await input.client?.app?.log?.({ body: { service: "skill-shelf", level: "info", message: `Skill Shelf workbench: ${current.url}` } });
@@ -14576,36 +14633,7 @@ async function SkillShelfPlugin(input = {}, options = {}) {
     current.app = null;
     if (instance === current) instance = void 0;
   }
-  current.hooks = {
-    auth: {
-      provider: "skill-shelf",
-      methods: [
-        { label: "\u6253\u5F00 Skill Shelf", url: null },
-        { label: "GitHub", url: "https://github.com/voidrinz/skill-shelf-magpie-plugin" }
-      ].map(({ label, url }) => ({
-        type: "oauth",
-        label,
-        async authorize() {
-          await ensure();
-          if (current.stopping || !current.url) throw new Error("Enable Skill Shelf in Magpie before opening the workbench.");
-          if (!url) await peerAt(Number(new URL(current.url).port), dataDir);
-          return {
-            url: url ?? `${current.url}/`,
-            instructions: "\u6B64\u5165\u53E3\u53EA\u6253\u5F00\u9875\u9762\uFF0C\u4E0D\u662F\u4F9B\u5E94\u5546\u767B\u5F55\u3002\u65E0\u9700\u5BC6\u94A5\u6216\u9A8C\u8BC1\u7801\uFF1B\u9875\u9762\u6253\u5F00\u540E\u53EF\u4EE5\u53D6\u6D88\u6B64\u7A97\u53E3\u3002",
-            method: "code",
-            callback: async () => ({ type: "failed" })
-          };
-        }
-      })),
-      async loader() {
-        return {};
-      }
-    },
-    async config(config) {
-      config.provider ??= {};
-      config.provider["skill-shelf"] = { name: "Skill Shelf", models: {} };
-    }
-  };
+  current.hooks = {};
   try {
     await ensure();
   } catch (error2) {
